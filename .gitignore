@@ -1,0 +1,9 @@
+node_modules
+documents
+
+# build
+dist
+
+
+# jest
+coverage
