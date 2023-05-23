@@ -1,0 +1,24 @@
+{
+    "apps": [
+      {
+        "name": "proxy-acg-plat-server",
+        "exec_interpreter": "node",
+        "exec_mode": "fork",
+        "cwd": "dist/",
+        "args": "",
+        "script": "main.js",
+        "max_memory_restart": "256M",
+        "node_args": [],
+        "watch": false,
+        "error_file": "./resources/proxy-acg-error.log",
+        "out_file": "./resources/proxy-acg-out.log",
+        "pid_file": "./resources/proxy-acg.pid",
+        "env": {
+          "NODE_ENV": "production"
+        },
+        "min_uptime": "60s",
+        "max_restarts": 2
+      }
+    ]
+  }
+  

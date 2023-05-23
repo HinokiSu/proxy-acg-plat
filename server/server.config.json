@@ -1,0 +1,4 @@
+{
+    "DataBaseURL": "mongodb://acg:acg%40hinoki@107.191.40.8:27017/?directConnection=true&serverSelectionTimeoutMS=5000",
+    "Port": "5100"
+}
