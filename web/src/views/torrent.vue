@@ -43,7 +43,7 @@ export default defineComponent({
     const torrentStore = useTorrentStore()
     const paginRef = reactive({
       curPage: 1,
-      pageSize: 2,
+      pageSize: 20,
       total: computed(() => torrentStore.total)
     })
 

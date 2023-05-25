@@ -1,5 +1,7 @@
 <template>
-  <div class="right-footer">Created by Hinoki</div>
+  <footer class="right-footer">
+    Created by <a href="https://github.com/HinokiSu">Hinoki </a>
+  </footer>
 </template>
 
 <script lang="ts">

@@ -3,7 +3,7 @@
     <div class="tags-list">
       <torrent-tag
         :tag="tag"
-        v-for="(tag, index) in tags"
+        v-for="(tag, index) in tagsRef"
         :key="index"
       ></torrent-tag>
     </div>
@@ -11,21 +11,25 @@
 </template>
 
 <script lang="ts">
-import { defineComponent } from 'vue'
+import { computed, defineComponent } from 'vue'
 import TorrentTag from './torrent-tag.vue'
 export default defineComponent({
   name: 'TorrentTags',
   props: {
     tags: {
-      type: Array<string>,
+      type: String,
       default: []
     }
   },
   components: {
     TorrentTag
   },
-  setup() {
-    return {}
+  setup(props) {
+    const tagsRef = computed(() => {
+      const _t = props.tags
+      return _t.split(',')
+    })
+    return { tagsRef }
   }
 })
 </script>

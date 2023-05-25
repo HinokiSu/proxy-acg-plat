@@ -1,5 +1,7 @@
 import { handleSuccess } from '../utils/responseMsgHandler'
-import { TorrentModel } from '../model/torrent.model'
+import db from '../db'
+import { calcOffset } from '../utils/calcOffset'
+import TorrentSql from '../db/sql/torrent.sql'
 
 /**
  * Get torrent by pagination
@@ -7,21 +9,15 @@ import { TorrentModel } from '../model/torrent.model'
  * @param pageSize number
  * @returns Promise<array>
  */
-export const getTorrentPagination = async (
-  curPage: number,
-  pageSize: number
-) => {
-  const total = await TorrentModel.count({})
-  const res = await TorrentModel.find({})
-    .skip((curPage - 1) * pageSize)
-    .limit(pageSize)
-    .sort({ publish_time: -1, _id: -1 })
-    .exec()
+export const getTorrentPagination = (curPage: number, pageSize: number) => {
+  const total = db.get(TorrentSql.calcTotal)
+  const offset = calcOffset(curPage, pageSize)
+  const res = db.query(TorrentSql.paginSelect, [pageSize, offset])
   return handleSuccess({
     msg: `Get Torrent by pagination success`,
     data: {
       list: res,
-      total
+      ...total
     }
   })
 }
@@ -30,12 +26,12 @@ export const getTorrentPagination = async (
  * get torrent total
  * @returns number
  */
-export const getTorrentTotal = async () => {
-  const total = await TorrentModel.count({})
+export const getTorrentTotal = () => {
+  const total = db.get(TorrentSql.calcTotal)
   return handleSuccess({
     msg: 'Get torrent total success',
     data: {
-      total: total
+      ...total
     }
   })
 }

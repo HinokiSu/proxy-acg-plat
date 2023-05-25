@@ -12,12 +12,13 @@
     "preview": "node dist/main.js"
   },
   "dependencies": {
+    "better-sqlite3": "^8.4.0",
     "cors": "^2.8.5",
     "dayjs": "^1.11.7",
-    "express": "^4.18.2",
-    "mongoose": "^7.1.1"
+    "express": "^4.18.2"
   },
   "devDependencies": {
+    "@types/better-sqlite3": "^7.6.4",
     "@types/cors": "^2.8.13",
     "@types/express": "^4.17.14",
     "@types/jest": "^29.2.4",
