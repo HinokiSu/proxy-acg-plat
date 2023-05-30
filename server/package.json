@@ -4,11 +4,14 @@
   "main": "dist/main.js",
   "license": "MIT",
   "scripts": {
-    "clean": "rimraf dist/",
+    "test": "jest",
+    "clean": "rimraf dist/&&rimraf build/",
     "dev": "set NODE_ENV=development&&nodemon  --watch src/**/* -e ts,tsx --exec ts-node src/main.ts",
     "start": "tsc && node dist/main.js",
-    "watch-server": "nodemon  --watch src/**/* -e ts,tsx --exec ts-node ./src/main.ts",
-    "build": "yarn clean && yarn tsc",
+    "zip": "mkdirp ./build/&&node script/zip-dist.js",
+    "copy-config": "copyfiles  \"./server.config.json\" \"./dist/\"",
+    "watch-server": "set NODE_ENV=development&&nodemon  --watch src/**/* -e ts,tsx --exec ts-node ./src/main.ts",
+    "build": "set NODE_ENV=production&&yarn clean && yarn tsc && yarn copy-config && yarn zip",
     "preview": "node dist/main.js"
   },
   "dependencies": {
@@ -23,6 +26,7 @@
     "@types/express": "^4.17.14",
     "@types/jest": "^29.2.4",
     "@types/node": "^20.1.0",
+    "archiver": "^5.3.1",
     "copyfiles": "^2.4.1",
     "jest": "^29.5.0",
     "mkdirp": "^2.1.6",

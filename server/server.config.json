@@ -1,4 +1,4 @@
 {
-    "DataBasePath": "D:\\GitHub\\proxy-acg\\resources\\database\\acg_db.db",
+    "DataBasePath": "D:\\GitHub\\proxy-acg-plat\\server\\resources\\database\\acg_db.db",
     "Port": "5100"
 }
