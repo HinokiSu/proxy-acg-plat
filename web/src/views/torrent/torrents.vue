@@ -1,22 +1,16 @@
 <template>
   <div class="torrent-page">
-    <div class="torrent-list">
-      <div
-        class="torrent-list-item"
-        v-for="item in torrentList"
-        :key="item._id"
-      >
-        <torrent-card :torrent="item"></torrent-card>
-      </div>
-    </div>
-    <!-- <pagination></pagination> -->
-    <load-more
-      @click="loadMoreClick"
-      class="load-more-main"
-      :loading="moreLoading"
-      :over="loadedOver"
-    ></load-more>
+    <title-navigation title="To Search" to="torrentSearch"></title-navigation>
+    <torrent-list
+      :total="paginRef.total"
+      :size="paginRef.pageSize"
+      :loading="loading"
+      :loading-more="loadingMore"
+      v-model:current="paginRef.curPage"
+      @loadMore="loadMoreClick"
+    ></torrent-list>
   </div>
+  <to-top></to-top>
 </template>
 
 <script lang="ts">
@@ -29,15 +23,15 @@ import {
   onUnmounted,
   reactive
 } from 'vue'
-import TorrentCard from '@components/torrent-card/index.vue'
-import Pagination from '@components/pagination/pagination.vue'
-import LoadMore from '@components/load-more/load-more.vue'
+import TorrentList from '@components/torrent-list/torrent-list.vue'
+import ToTop from '@components/to-top/to-top.vue'
+import TitleNavigation from '@components/title-navigation/title-navigation.vue'
 export default defineComponent({
   name: 'Torrent',
   components: {
-    TorrentCard,
-    Pagination,
-    LoadMore
+    TorrentList,
+    ToTop,
+    TitleNavigation
   },
   setup() {
     const torrentStore = useTorrentStore()
@@ -48,15 +42,7 @@ export default defineComponent({
     })
 
     const loading = ref(false)
-    const moreLoading = ref(false)
-    const loadedOver = computed(() => {
-      if (!paginRef.total) return true
-
-      if (paginRef.total === torrentList.value.length) {
-        return true
-      }
-      return false
-    })
+    const loadingMore = ref(false)
 
     const torrentList = computed(() => torrentStore.torrentList)
 
@@ -70,13 +56,13 @@ export default defineComponent({
     }
 
     const loadMoreClick = async () => {
-      moreLoading.value = true
+      loadingMore.value = true
       paginRef.curPage = paginRef.curPage + 1
       setTimeout(async () => {
         await torrentStore
           .getTorrentByPagin(paginRef.curPage, paginRef.pageSize)
           .then(() => {
-            moreLoading.value = false
+            loadingMore.value = false
           })
       }, 500)
     }
@@ -96,8 +82,7 @@ export default defineComponent({
       torrentList,
       getDataAndWait,
       loadMoreClick,
-      moreLoading,
-      loadedOver
+      loadingMore
     }
   }
 })
