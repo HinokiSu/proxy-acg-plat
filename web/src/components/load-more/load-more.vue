@@ -11,7 +11,6 @@
         </span>
       </div>
     </div>
-    <div v-else class="loaded-over">Loaded over</div>
   </div>
 </template>
 
@@ -25,7 +24,9 @@ export default defineComponent({
   },
   props: {
     loading: Boolean,
-    over: Boolean
+    over: {
+      type: Boolean
+    }
   },
   emits: ['click'],
   setup(props, { emit }) {
