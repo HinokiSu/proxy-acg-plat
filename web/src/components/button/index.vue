@@ -1,0 +1,203 @@
+<template>
+  <button
+    class="acg-button"
+    :disabled="isDisabled"
+    @click="clickHandler"
+    :class="classes"
+  >
+    <div class="button-prefix-icon" v-if="hasPreIconSlot">
+      <slot name="preIcon"></slot>
+    </div>
+    <div class="acg-button-text">
+      {{ title }}
+    </div>
+  </button>
+</template>
+
+<script lang="ts">
+import { computed, defineComponent } from 'vue'
+
+export default defineComponent({
+  name: 'AcgButton',
+  props: {
+    title: {
+      type: String,
+      default: ''
+    },
+    color: {
+      type: String,
+      default: 'default'
+    },
+    disabled: {
+      type: Boolean,
+      default: false
+    },
+    active: {
+      type: Boolean,
+      default: false
+    }
+  },
+  emits: ['click'],
+  setup(props, { emit, slots }) {
+    const propsRef = computed(() => props)
+    const clickHandler = () => {
+      emit('click')
+    }
+    const isDisabled = computed(() => props.disabled)
+    const classes = computed(() => {
+      const _a = []
+      if (propsRef.value.disabled) {
+        _a.push('is-disabled')
+      } else {
+        _a.push(propsRef.value.color)
+      }
+      if (propsRef.value.active) {
+        _a.push('is-active')
+      }
+      return _a
+    })
+
+    const hasPreIconSlot = computed(() => (slots.preIcon ? true : false))
+
+    return {
+      clickHandler,
+      classes,
+      isDisabled,
+      hasPreIconSlot
+    }
+  }
+})
+</script>
+
+<style lang="less" scoped>
+@--acg-icon-bg: #777;
+@--acg-icon-bg-hover: #111;
+/* Reference to: NextUI */
+@--acg-colors-primary: #0072f5;
+@--acg-colors-text: #11181c;
+@--acg-colors-border: rgb(0, 0, 0, 0.15);
+@--acg-color-gradient: linear-gradient(
+  112deg,
+  #06b7db -63.59%,
+  #ff4ecd -20.3%,
+  #0072f5 70.46%
+);
+@--acg-fonts-sans: Inter, -apple-system, BlinkMacSystemFont, 'Segoe UI',
+  'Roboto', 'Oxygen', 'Ubuntu', 'Cantarell', 'Fira Sans', 'Droid Sans',
+  'Helvetica Neue', sans-serif;
+
+.acg-button {
+  min-width: min-content;
+  width: auto;
+
+  padding-left: 0.875rem;
+  padding-right: 0.875rem;
+
+  height: 2.5rem;
+  line-height: 2.5rem;
+
+  font-size: 0.875rem;
+  font-weight: 500;
+  text-align: center;
+  color: #fff;
+
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  appearance: none;
+  box-sizing: border-box;
+  user-select: none;
+  white-space: nowrap;
+  transition: background 0.25s ease 0s, color 0.25s ease 0s,
+    border-color 0.25s ease 0s, box-shadow 0.25s ease 0s,
+    transform 0.25s ease 0s, opacity 0.25s ease 0s;
+  position: relative;
+  overflow: hidden;
+  border: none;
+  cursor: pointer;
+  pointer-events: auto;
+  padding: 0px;
+  border-radius: 12px;
+
+  border-style: solid;
+  min-width: min-content;
+  border-width: 2px;
+
+  &.is-disabled {
+    background: #efeef0;
+    color: #7e868c;
+    transform: none;
+    box-shadow: none;
+    pointer-events: none;
+  }
+
+  &.default {
+    background-color: #eceef0;
+    color: #768e8c;
+  }
+
+  &.primary {
+    background: transparent;
+    border-color: @--acg-colors-primary;
+    color: @--acg-colors-primary;
+    padding-left: 1.25rem;
+    padding-right: 1.25rem;
+    border-style: solid;
+    min-width: min-content;
+    border-width: 2px;
+    &:hover {
+      color: #fff;
+      background: @--acg-colors-primary;
+    }
+  }
+
+  &.gradient {
+    padding: 2px;
+    background-position: initial;
+    background-size: initial;
+    background-repeat: initial;
+    background-attachment: initial;
+    background-origin: initial;
+    background-color: transparent;
+    color: #444;
+    background-clip: content-box, border-box;
+    background-image: linear-gradient(#fff, #fff), @--acg-color-gradient;
+    border: none;
+
+    &:hover {
+      background: @--acg-color-gradient;
+      color: #fff;
+      .button-prefix-icon {
+        color: #fff;
+      }
+    }
+
+    &.is-active {
+      background: @--acg-color-gradient;
+      color: #fff;
+    }
+  }
+}
+
+.button-prefix-icon {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  color: inherit;
+  z-index: 100;
+  padding-left: 8px;
+}
+
+.acg-button-text {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  z-index: 200;
+  padding-left: 0.6rem;
+  padding-right: 0.6rem;
+  line-height: 2.5rem;
+
+  font-size: inherit;
+  font-family: @--acg-fonts-sans;
+}
+</style>
