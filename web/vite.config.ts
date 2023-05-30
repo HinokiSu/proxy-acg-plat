@@ -1,10 +1,16 @@
 import { defineConfig } from 'vite'
 import { resolve } from 'path'
 import vue from '@vitejs/plugin-vue'
+import { visualizer } from 'rollup-plugin-visualizer'
 // https://vitejs.dev/config/
 export default defineConfig({
   base: '/acg/',
-  plugins: [vue()],
+  plugins: [
+    vue(),
+    visualizer({
+      filename: 'stats.html'
+    })
+  ],
   resolve: {
     alias: [
       { find: '@', replacement: resolve(__dirname, 'src/') },
@@ -21,7 +27,8 @@ export default defineConfig({
       },
       { find: '@utils', replacement: resolve(__dirname, 'src/utils') },
       { find: '@api', replacement: resolve(__dirname, 'src/api') },
-      { find: '@hooks', replacement: resolve(__dirname, 'src/hooks') }
+      { find: '@hooks', replacement: resolve(__dirname, 'src/hooks') },
+      { find: '@icons', replacement: resolve(__dirname, 'src/icons') }
     ]
   },
 

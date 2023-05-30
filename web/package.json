@@ -22,6 +22,7 @@
     "dayjs": "^1.11.7",
     "floating-vue": "^2.0.0-beta.20",
     "nprogress": "^0.2.0",
+    "rollup-plugin-visualizer": "^5.9.0",
     "typescript": "^5.0.2",
     "vite": "^4.3.2",
     "vue-tsc": "^1.4.2"

@@ -3,7 +3,10 @@ documents
 
 # build
 dist
-
+build
+resources
 
 # jest
 coverage
+
+stats.html
