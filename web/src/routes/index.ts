@@ -4,12 +4,34 @@ const routes: RouteRecordRaw[] = [
   {
     path: '/',
     name: 'root',
-    redirect: '/torrent'
+    redirect: '/torrent/all'
   },
   {
     path: '/torrent',
     name: 'torrent',
-    component: () => import('@views/torrent.vue')
+    children: [
+      {
+        path: 'all',
+        name: 'torrents',
+        component: () => import('@views/torrent/torrents.vue')
+      },
+      {
+        path: 'search',
+        name: 'torrentSearch',
+        component: () => import('@views/torrent/search-torrent.vue')
+      }
+    ]
+  },
+  {
+    path: '/anime',
+    name: 'anime',
+    children: [
+      {
+        path: 'quarter',
+        name: 'quarter',
+        component: () => import('@views/anime/anime.vue')
+      }
+    ]
   }
 ]
 
