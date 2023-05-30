@@ -1,12 +1,15 @@
 import express from 'express'
 import { TPaginQuery } from '../interfaces/request.types'
-import { getTorrentPagination, getTorrentTotal } from '../services/torrent.services'
+import {
+  getFuzzySearchTitle,
+  getTorrentPagination,
+  getTorrentTotal
+} from '../services/torrent.services'
 
 const torrentRouter = express.Router()
 /* route child root: torrent */
-torrentRouter.get('/latest', (req, res) => {})
 
-torrentRouter.get('/pagin', async (req: any, res) => {
+torrentRouter.get('/pagin', (req: any, res) => {
   try {
     const pagin: TPaginQuery = req.query
     if (!pagin.curpage) {
@@ -15,15 +18,28 @@ torrentRouter.get('/pagin', async (req: any, res) => {
         status: 0
       })
     }
-    res.json(await getTorrentPagination(pagin.curpage, pagin.pagesize))
+    res.json(getTorrentPagination(pagin.curpage, pagin.pagesize))
   } catch (error) {
     console.log(error)
   }
 })
 
-torrentRouter.get('/count', async (req, res) => {
+torrentRouter.get('/count', (req, res) => {
   try {
-    res.json(await getTorrentTotal())
+    res.json(getTorrentTotal())
+  } catch (err) {
+    console.log(err)
+  }
+})
+
+interface TSearchPagin extends TPaginQuery {
+  keyword: string
+}
+
+torrentRouter.get('/search', (req: any, res) => {
+  try {
+    const pagin: TSearchPagin = req.query
+    res.json(getFuzzySearchTitle(pagin.keyword, pagin.curpage, pagin.pagesize))
   } catch (err) {
     console.log(err)
   }

@@ -3,10 +3,10 @@ import torrentRouter from './routes/torrent.route'
 import cors from 'cors'
 import getServerConfig from './get-config'
 
-const bootstrap = async () => {
+const bootstrap = () => {
   const server = express()
   server.use(cors())
-  const config = await getServerConfig()
+  const config = getServerConfig()
   console.log(config)
   const port = config.Port
 
