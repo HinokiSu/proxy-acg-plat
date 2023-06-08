@@ -52,6 +52,7 @@ export default defineComponent({
   position: fixed;
   right: 10px;
   bottom: 8%;
+  z-index: 991;
 
   .icon {
     color: #c1c8cd;
