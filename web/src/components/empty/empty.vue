@@ -23,6 +23,12 @@ export default defineComponent({
 
 <style lang="less" scoped>
 .empty {
-    margin: auto;
+  margin: auto;
+  color: #f881ab;
+  font-size: 1.2rem;
+  padding: 1rem 1.2rem;
+  border: 1px solid #eaeaea;
+  border-radius: 1rem;
+  cursor: pointer;
 }
 </style>
