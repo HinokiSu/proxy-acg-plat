@@ -42,8 +42,13 @@ export const useTorrentStore = defineStore('TorrentStore', {
       handleError(res)
       return res.data.total
     },
-    async searchFuzzyTitle(keyword: string, curPage: number, pageSize: number) {
-      const res = await fetchFuzzySearchTitle(keyword, curPage, pageSize)
+    async searchFuzzyTitle(
+      curPage: number,
+      pageSize: number,
+      keyword?: string,
+      anime?: string
+    ) {
+      const res = await fetchFuzzySearchTitle(curPage, pageSize, keyword, anime)
       handleError(res)
       if (res.data.list.length) {
         this.isCompleted = false

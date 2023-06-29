@@ -18,12 +18,14 @@ export const fetchTorrentCount = (): Promise<TCountResult> =>
   ApiClient.get(apiURLHandler(apiBasePath, `/total`))
 
 export const fetchFuzzySearchTitle = (
-  keyword: string,
   curPage: number,
-  pageSize: number
+  pageSize: number,
+  keyword?: string,
+  anime?: string
 ): Promise<TPaginTorrentResult> =>
   ApiClient.get(apiURLHandler(apiBasePath, `/search`), {
-    keyword,
     curpage: curPage,
-    pagesize: pageSize
+    pagesize: pageSize,
+    keyword,
+    anime
   })
