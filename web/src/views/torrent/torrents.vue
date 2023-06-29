@@ -1,6 +1,6 @@
 <template>
   <div class="torrent-page">
-    <title-navigation title="To Search" to="torrentSearch"></title-navigation>
+    <title-navigation title="To Search" to="torrent-search"></title-navigation>
     <torrent-list
       :total="paginRef.total"
       :size="paginRef.pageSize"
@@ -26,12 +26,14 @@ import {
 import TorrentList from '@components/torrent-list/torrent-list.vue'
 import ToTop from '@components/to-top/to-top.vue'
 import TitleNavigation from '@components/title-navigation/title-navigation.vue'
+import Toast from '@components/toast/toast.vue'
 export default defineComponent({
   name: 'Torrent',
   components: {
     TorrentList,
     ToTop,
-    TitleNavigation
+    TitleNavigation,
+    Toast
   },
   setup() {
     const torrentStore = useTorrentStore()
@@ -80,9 +82,9 @@ export default defineComponent({
       loading,
       paginRef,
       torrentList,
+      loadingMore,
       getDataAndWait,
-      loadMoreClick,
-      loadingMore
+      loadMoreClick
     }
   }
 })
@@ -96,6 +98,6 @@ export default defineComponent({
 }
 .load-more-main {
   margin-top: 10px;
-  margin-bottom: 10%;
+  margin-bottom: 15%;
 }
 </style>
