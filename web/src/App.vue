@@ -9,7 +9,7 @@ import MainLayout from './layout/main-layout.vue'
 export default defineComponent({
   name: 'App',
   components: {
-    MainLayout,
+    MainLayout
   },
   setup() {
     return {}
@@ -17,4 +17,6 @@ export default defineComponent({
 })
 </script>
 
-<style scoped></style>
+<style lang="less">
+
+</style>
