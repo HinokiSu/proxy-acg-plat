@@ -14,11 +14,14 @@ import { TMenuItem } from '@interfaces/menu.types'
 import { computed, defineComponent, PropType } from 'vue'
 import ForeverRingIcon from '@icons/forever-ring-icon.vue'
 import MovieIcon from '@icons/movie-icon.vue'
+import AdminIcon from '@icons/admin-icon.vue'
+
 export default defineComponent({
   name: 'MenuItem',
   components: {
     ForeverRingIcon,
-    MovieIcon
+    MovieIcon,
+    AdminIcon
   },
   props: {
     item: Object as PropType<TMenuItem>,
@@ -52,17 +55,22 @@ export default defineComponent({
   padding: 10px 12px;
   text-align: center;
   background-color: @--menu-bg-color;
-  border-radius: 0px 4px 4px 0px;
   cursor: pointer;
-  transition: all 0.5s ease;
+  transition: all 0.3s ease;
   color: #889096;
   font-size: 0.9rem;
   border: 1px solid #eaeaea;
-  box-shadow:  0px 6px 30px 4px #eaeaea;
+  // border-radius: 0px 4px 4px 0px;
+  border-top-right-radius: 6px;
+  border-bottom-right-radius: 6px;
 
   display: flex;
   flex-direction: row;
   align-items: center;
+
+  @media screen and(max-width:500px) {
+     padding: 8px 8px;
+  }
 
   &-icon {
     padding-right: 4px;
@@ -79,7 +87,7 @@ export default defineComponent({
 
   &.active {
     // background-color: @--menu-bg-color-active;
-    background: linear-gradient(90deg, #ffe5f8, #ffd6f3, #ffc2ee);
+    background: linear-gradient(90deg, #ffe5f8, #f6c6e7, #ffc2ee);
     border-color: #eaeaea;
     color: #11181c;
   }

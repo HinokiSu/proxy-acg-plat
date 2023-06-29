@@ -16,7 +16,7 @@
 </template>
 
 <script lang="ts">
-import { computed, defineComponent, ref } from 'vue'
+import { computed, defineComponent, onMounted, onUnmounted, ref } from 'vue'
 import MenuItem from './menu-item.vue'
 import { useMenuStore } from '@stores/menu.store'
 import { useRouter } from 'vue-router'
@@ -35,7 +35,7 @@ export default defineComponent({
     const clickItem = (val: any) => {
       // change menu item status
       menuStore.changeMenuItemStatus(val.key)
-      console.log(val.name)
+      sessionStorage.setItem('menu_key', val.key)
       router.push({
         name: val.name
       })
@@ -44,6 +44,17 @@ export default defineComponent({
     const changeCollapseStatus = () => {
       isCollapse.value = !isCollapse.value
     }
+
+    onMounted(() => {
+      menuStore.getMenuList()
+      const menuKey = menuStore.getMenuKey
+      menuStore.changeMenuItemStatus(menuKey)
+    })
+
+    onUnmounted(() => {
+      menuStore.clearState()
+    })
+
     return {
       menusRef,
       isCollapse,
@@ -66,14 +77,19 @@ export default defineComponent({
 
       cursor: pointer;
       width: 100%;
-      padding: 6px 4px;
+      padding: 10px 12px;
       border: 1px solid #eaeaea;
       margin-bottom: 6px;
       color: #889096;
       display: flex;
       justify-content: center;
-      border-radius: 0px 4px 4px 0px;
-      box-shadow: 1px 6px 24px 3px #eaeaea;
+      // border-radius: 0px 4px 4px 0px;
+      border-top-right-radius: 7px;
+      border-bottom-right-radius: 7px;
+
+      @media screen and(max-width:500px) {
+        padding: 6px 8px;
+      }
       &:hover {
         color: #11181c;
       }
