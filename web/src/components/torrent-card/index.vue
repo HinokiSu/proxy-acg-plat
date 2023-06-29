@@ -18,15 +18,9 @@
       </div>
 
       <div class="torrent-links">
-        <v-tooltip>
-          <a
-            target="_self"
-            :href="torrentObj.magnet"
-            class="text-decoration-none"
-            >Torrent</a
-          >
-          <template #popper> {{ torrentObj.create_at }} </template>
-        </v-tooltip>
+        <a target="_self" :href="torrentObj.magnet" class="text-decoration-none"
+          >Torrent</a
+        >
       </div>
     </div>
   </div>

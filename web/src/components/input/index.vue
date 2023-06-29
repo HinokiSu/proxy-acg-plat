@@ -14,7 +14,7 @@
           :readonly="readOnly"
           :disabled="disable"
           class="input-body"
-          type="text"
+          :type="type"
           :placeholder="isLabelPlaceholder ? '' : placeholder"
           v-model="inputVal"
           @input="changeValue"
@@ -56,6 +56,10 @@ export default defineComponent({
     label: {
       type: String,
       default: ''
+    },
+    type: {
+      type: String,
+      default: 'text'
     }
   },
   emits: ['update:value'],

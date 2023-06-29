@@ -3,14 +3,14 @@
     <div class="torrent-list-item" v-for="item in torrents" :key="item._id">
       <torrent-card :torrent="item"></torrent-card>
     </div>
+    <load-more
+      @click="loadMoreClick"
+      class="load-more-main"
+      :loading="loadingMore"
+      :over="loadedOver"
+    ></load-more>
   </div>
   <!-- <pagination></pagination> -->
-  <load-more
-    @click="loadMoreClick"
-    class="load-more-main"
-    :loading="loadingMore"
-    :over="loadedOver"
-  ></load-more>
 </template>
 
 <script lang="ts">
