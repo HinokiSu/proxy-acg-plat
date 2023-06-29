@@ -1,7 +1,5 @@
 import axios, { AxiosInstance } from 'axios'
 import NProgress from '../plugins/nprogress'
-import { useRouter } from 'vue-router'
-
 type HttpHeaders = {
   [key: string]: string
 }
@@ -11,7 +9,8 @@ type RequestConfig = {
 }
 
 const handleServiceError = (error: any) => {
-  console.log(error)
+  NProgress.done()
+  console.log(error.message)
 }
 
 // const apiBaseURL = `http://localhost:5100`
@@ -37,7 +36,7 @@ class ApiClient implements IApiClient {
       baseURL: apiBaseURL,
       responseType: 'json' as const,
       headers: {
-        'Content-Type': 'application/x-www-form-urlencoded;charset=UTF-8'
+        'Content-Type': 'application/x-www-form-urlencoded;charset=UTF-8',
       },
       timeout: 10 * 1000
     })
@@ -65,7 +64,9 @@ class ApiClient implements IApiClient {
   }
 
   handleError = (error: any) => {
-    const router = useRouter()
+    NProgress.done()
+    console.log(error.response.status)
+    /* const router = useRouter()
     switch (error.response.status) {
       case 401:
         router.push('/')
@@ -76,7 +77,7 @@ class ApiClient implements IApiClient {
       default:
         router.push('/500')
         break
-    }
+    } */
     return Promise.reject(error)
   }
 
