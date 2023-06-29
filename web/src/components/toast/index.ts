@@ -7,7 +7,6 @@ export interface IProps {
 }
 
 const Toast = ({ color, msg, duration = 3000 }: IProps) => {
-  let timer = null
   const div = document.createElement('div')
   // root node
   const vNode = createVNode(toastTemplate, { msg, color })
@@ -17,7 +16,7 @@ const Toast = ({ color, msg, duration = 3000 }: IProps) => {
 
   const el = document.body.appendChild(div)
 
-  timer = setTimeout(() => {
+   setTimeout(() => {
     return setTimeout(() => {
       // destroy
       document.body.removeChild(el)
