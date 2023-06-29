@@ -9,10 +9,9 @@
 </template>
 
 <script lang="ts">
-import { defineComponent, onMounted, onUnmounted } from 'vue'
+import { defineComponent } from 'vue'
 import RightFooter from './right-footer.vue'
 import sideBar from './side-bar/side-bar.vue'
-import { useMenuStore } from '@stores/menu.store'
 export default defineComponent({
   name: 'MainLayout',
 
@@ -21,14 +20,6 @@ export default defineComponent({
     sideBar
   },
   setup() {
-    const menuStore = useMenuStore()
-    onMounted(() => {
-      menuStore.getMenuList()
-    })
-
-    onUnmounted(() => {
-      menuStore.clearState()
-    })
     return {}
   }
 })
@@ -44,7 +35,8 @@ export default defineComponent({
   min-height: 100vh;
   margin: auto;
   display: flex;
-  justify-content: center;
+  flex-direction: column;
+  align-items: center;
 
   @media (max-width: 500px) {
     width: 100%;
