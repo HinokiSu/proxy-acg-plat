@@ -3,17 +3,18 @@
     <div class="search-container">
       <acg-input
         class="input-self"
-        placeholder="Enter Anime or Keywords..."
+        label-placeholder="Enter Anime or Keywords..."
         v-model:value="searchVal"
       ></acg-input>
       <acg-button
         class="button-self"
         title="Search"
-        color="gradient"
+        color="primary"
         @click="clickSearch"
       ></acg-button>
     </div>
     <torrent-list
+      v-show="!isEmpty"
       :total="paginRef.total"
       :size="paginRef.pageSize"
       :loading="loading"
@@ -23,26 +24,40 @@
     ></torrent-list>
     <!-- <div class="loaded-over">Loaded All.</div> -->
   </div>
+  <empty v-show="isEmpty" tips="No Result Found"></empty>
   <to-top v-show="!isCenter"></to-top>
 </template>
 
 <script lang="ts">
 import { useTorrentStore } from '@stores/torrent.store'
-import { computed, defineComponent, onUnmounted, reactive, ref } from 'vue'
+import {
+  computed,
+  defineComponent,
+  getCurrentInstance,
+  onUnmounted,
+  reactive,
+  ref,
+  watch
+} from 'vue'
 import TorrentList from '@components/torrent-list/torrent-list.vue'
 import AcgInput from '@components/input/index.vue'
 import AcgButton from '@components/button/index.vue'
 import ToTop from '@components/to-top/to-top.vue'
+import { useRoute } from 'vue-router'
+import Empty from '@components/empty/empty.vue'
 export default defineComponent({
   name: 'SearchTorrentPage',
   components: {
     TorrentList,
     AcgInput,
     AcgButton,
-    ToTop
+    ToTop,
+    Empty
   },
+
   setup() {
     const torrentStore = useTorrentStore()
+    const { proxy } = getCurrentInstance() as any
     const loading = ref(false)
     const paginRef = reactive({
       curPage: 1,
@@ -53,13 +68,24 @@ export default defineComponent({
     // control search input whether center
     const isCenter = ref(true)
     const loadingMore = ref(false)
+    const isEmpty = ref(false)
+    const anime = ref('')
+    const route = useRoute()
 
     const getDataAndWait = async () => {
       loading.value = true
       await torrentStore
-        .searchFuzzyTitle(searchVal.value, paginRef.curPage, paginRef.pageSize)
+        .searchFuzzyTitle(
+          paginRef.curPage,
+          paginRef.pageSize,
+          searchVal.value,
+          anime.value
+        )
         .then(() => {
           loading.value = false
+          if (!torrentStore.torrentList.length) {
+            isEmpty.value = true
+          }
         })
     }
 
@@ -67,7 +93,11 @@ export default defineComponent({
       torrentStore.clearState()
       if (!searchVal.value.trim()) {
         isCenter.value = true
-        return console.log('Warn: Search value cannot be empty!')
+        return proxy.$toast({
+          color: 'warning',
+          msg: 'Warn: Search value cannot be empty!',
+          duration: 3000
+        })
       }
       await getDataAndWait().then(() => {
         isCenter.value = !isCenter.value
@@ -80,15 +110,30 @@ export default defineComponent({
       setTimeout(async () => {
         await torrentStore
           .searchFuzzyTitle(
-            searchVal.value,
             paginRef.curPage,
-            paginRef.pageSize
+            paginRef.pageSize,
+            searchVal.value,
+            anime.value
           )
           .then(() => {
             loadingMore.value = false
           })
       }, 500)
     }
+
+    watch(
+      () => route.params?.word,
+      async (newVal) => {
+        if (newVal) {
+          isCenter.value = false
+          anime.value = newVal as string
+          await getDataAndWait()
+        }
+      },
+      {
+        immediate: true
+      }
+    )
 
     onUnmounted(() => {
       torrentStore.clearState()
@@ -102,6 +147,7 @@ export default defineComponent({
       loadingMore,
       searchVal,
       isCenter,
+      isEmpty,
       loadMoreClick,
       clickSearch
     }
@@ -119,6 +165,7 @@ export default defineComponent({
 
   &.center {
     align-items: center;
+    height: 100vh;
   }
   .search-container {
     display: flex;
@@ -136,6 +183,7 @@ export default defineComponent({
       font-weight: 400;
       font-size: 0.9rem;
       padding: 2px;
+      margin-left: 12px;
     }
   }
 }
