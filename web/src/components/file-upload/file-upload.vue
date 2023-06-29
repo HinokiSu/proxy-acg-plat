@@ -4,27 +4,41 @@
       <input type="file" @change="handleFileChange($event)" />
       Upload
     </label>
-    <div v-if="errorsRef.length > 0" class="error">
-      <div class="error" v-for="(error, index) in errorsRef" :key="index">
-        <span>
-          {{ error }}
-        </span>
-      </div>
-    </div>
     <div v-if="fileRef.isUploaded" class="file-upload__preview">
       <img :src="fileRef.url" alt="" class="file-img" />
-      <div v-show="!fileRef.isImage" class="file-extension">
-        {{ fileRef.fileExtension }}
-      </div>
-      <span>
+      <div class="file-name">
         {{ fileRef.name }}
-      </span>
+      </div>
+      <div class="file__feature">
+        <acg-button
+          :w="'24px'"
+          h="2rem"
+          :fill-wd="'4px'"
+          color="primary"
+          title="Submit"
+          @click="submitHandle"
+        ></acg-button>
+        <acg-button
+          title="Reset"
+          :w="'24px'"
+          h="2rem"
+          :fill-wd="'4px'"
+          color="warning"
+          @click="resetHandle"
+        ></acg-button>
+      </div>
     </div>
   </div>
 </template>
 
 <script lang="ts">
-import { computed, defineComponent, reactive, ref } from 'vue'
+import {
+  computed,
+  defineComponent,
+  getCurrentInstance,
+  reactive,
+  ref
+} from 'vue'
 import AcgButton from '@components/button/index.vue'
 export default defineComponent({
   name: 'FileUpload',
@@ -43,8 +57,9 @@ export default defineComponent({
       default: ['jpg', 'jpeg', 'png', 'gif']
     }
   },
-  setup(props) {
-    const fileRef = reactive({
+  emits: ['submit'],
+  setup(props, { emit }) {
+    const initFileRes = () => ({
       name: '',
       size: 0,
       type: '',
@@ -53,7 +68,16 @@ export default defineComponent({
       isImage: false,
       isUploaded: false
     })
+    let file: File | null
+    const fileRef = ref(initFileRes())
+    const isLoading = ref(false)
+    const uploadRead = ref(true)
+    const resetHandle = () => {
+      fileRef.value = initFileRes()
+      file = null
+    }
 
+    const { proxy } = getCurrentInstance() as any
     const maxSizeRef = computed(() => {
       if (props.maxSize.includes('MB') || props.maxSize.includes('mb')) {
         const size =
@@ -74,30 +98,38 @@ export default defineComponent({
       const target = e.target as HTMLInputElement
       if (target.files && target.files[0]) {
         // Get file
-        const file = target.files[0]
+        file = target.files[0]
 
-        if (!isFileValid(file)) return console.log(`Invalid file`)
-        fileRef.size = Math.round((file.size / 1024) * 100) / 10
-        fileRef.fileExtension = file.name.split('.').pop() || ''
-        fileRef.name = file.name || ''
-        fileRef.isImage = props.accept.includes(fileRef.fileExtension)
-        console.log(fileRef)
+        if (!isFileValid(file)) {
+          return proxy.$toast({
+            color: 'error',
+            duration: 5000,
+            msg: `Error: ${errorsRef.join(',')}`
+          })
+        }
+
+        fileRef.value.size = Math.round((file.size / 1024) * 100) / 10
+        fileRef.value.fileExtension = file.name.split('.').pop() || ''
+        fileRef.value.name = file.name || ''
+        fileRef.value.isImage = props.accept.includes(
+          fileRef.value.fileExtension
+        )
         let reader = new FileReader()
         reader.addEventListener(
           'load',
           () => {
-            fileRef.url = reader.result as string
-            fileRef.isUploaded = true
+            fileRef.value.url = reader.result as string
+            fileRef.value.isUploaded = true
           },
           false
         )
         reader.readAsDataURL(file)
+        // uploadImg()
       }
     }
 
     /* valid */
     const isFileSizeValid = (fileSize: number) => {
-      console.log(fileSize)
       if (fileSize <= maxSizeRef.value) {
         console.log(`Valid: File size valid success`)
       } else {
@@ -120,16 +152,25 @@ export default defineComponent({
       return false
     }
 
-    const isLoading = ref(false)
-    const uploadRead = ref(true)
-    return { fileRef, isLoading, uploadRead, errorsRef, handleFileChange }
+    const submitHandle = () => {
+      emit('submit', file)
+    }
+    return {
+      fileRef,
+      isLoading,
+      uploadRead,
+      submitHandle,
+      resetHandle,
+      handleFileChange
+    }
   }
 })
 </script>
 
 <style lang="less" scoped>
 .file-upload {
-  width: 200px;
+  min-width: 200px;
+  width: 100%;
   padding: 12px;
   display: flex;
   align-items: center;
@@ -173,19 +214,23 @@ export default defineComponent({
   }
 
   &__preview {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
     .file-img {
       width: 100%;
       height: 200px;
       object-fit: contain;
     }
 
-    span {
-      font-size: 0.875rem;
+    .file-name {
+      font-size: 0.625rem;
     }
-  }
 
-  &__feature {
-    display: flex;
+    .file__feature {
+      padding-top: 10px;
+      display: flex;
+    }
   }
 }
 </style>
