@@ -1,17 +1,17 @@
 <template>
-  <div class="forever-ring-icon" :style="styles">
+  <div class="draw-icon" :style="styles">
     <svg
       focusable="false"
       aria-hidden="true"
       viewBox="0 0 24 24"
-      data-testid="AllInclusiveOutlinedIcon"
-      title="AllInclusiveOutlined"
+      data-testid="DrawOutlinedIcon"
+      title="DrawOutlined"
     >
       <path
         fill-rule="evenodd"
         clip-rule="evenodd"
         fill="currentColor"
-        d="M18.6 6.62c-1.44 0-2.8.56-3.77 1.53L7.8 14.39c-.64.64-1.49.99-2.4.99-1.87 0-3.39-1.51-3.39-3.38S3.53 8.62 5.4 8.62c.91 0 1.76.35 2.44 1.03l1.13 1 1.51-1.34L9.22 8.2C8.2 7.18 6.84 6.62 5.4 6.62 2.42 6.62 0 9.04 0 12s2.42 5.38 5.4 5.38c1.44 0 2.8-.56 3.77-1.53l7.03-6.24c.64-.64 1.49-.99 2.4-.99 1.87 0 3.39 1.51 3.39 3.38s-1.52 3.38-3.39 3.38c-.9 0-1.76-.35-2.44-1.03l-1.14-1.01-1.51 1.34 1.27 1.12c1.02 1.01 2.37 1.57 3.82 1.57 2.98 0 5.4-2.41 5.4-5.38s-2.42-5.37-5.4-5.37z"
+        d="m18.85 10.39 1.06-1.06c.78-.78.78-2.05 0-2.83L18.5 5.09c-.78-.78-2.05-.78-2.83 0l-1.06 1.06 4.24 4.24zm-4.24 1.42L7.41 19H6v-1.41l7.19-7.19 1.42 1.41zm-1.42-4.25L4 16.76V21h4.24l9.19-9.19-4.24-4.25zM19 17.5c0 2.19-2.54 3.5-5 3.5-.55 0-1-.45-1-1s.45-1 1-1c1.54 0 3-.73 3-1.5 0-.47-.48-.87-1.23-1.2l1.48-1.48c1.07.63 1.75 1.47 1.75 2.68zM4.58 13.35C3.61 12.79 3 12.06 3 11c0-1.8 1.89-2.63 3.56-3.36C7.59 7.18 9 6.56 9 6c0-.41-.78-1-2-1-1.26 0-1.8.61-1.83.64-.35.41-.98.46-1.4.12-.41-.34-.49-.95-.15-1.38C3.73 4.24 4.76 3 7 3s4 1.32 4 3c0 1.87-1.93 2.72-3.64 3.47C6.42 9.88 5 10.5 5 11c0 .31.43.6 1.07.86l-1.49 1.49z"
       ></path>
     </svg>
   </div>
@@ -22,7 +22,7 @@ import inlineStyles from '@hooks/inline-styles'
 import { defineComponent } from 'vue'
 
 export default defineComponent({
-  name: 'ForeverRingIcon',
+  name: 'DrawIcon',
   props: {
     w: {
       type: Number,
@@ -46,7 +46,7 @@ export default defineComponent({
 </script>
 
 <style lang="less" scoped>
-.forever-ring-icon {
+.draw-icon {
   cursor: pointer;
   color: inherit;
   background-color: inherit;
