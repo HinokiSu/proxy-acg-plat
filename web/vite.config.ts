@@ -2,6 +2,7 @@ import { defineConfig } from 'vite'
 import { resolve } from 'path'
 import vue from '@vitejs/plugin-vue'
 import { visualizer } from 'rollup-plugin-visualizer'
+import { compression } from 'vite-plugin-compression2'
 // https://vitejs.dev/config/
 export default defineConfig({
   base: '/acg/',
@@ -9,6 +10,10 @@ export default defineConfig({
     vue(),
     visualizer({
       filename: 'stats.html'
+    }),
+    compression({
+      include: [/\.(js)$/, /\.(css)$/],
+      deleteOriginalAssets: true
     })
   ],
   resolve: {
@@ -43,6 +48,15 @@ export default defineConfig({
   },
   // config proxy
   server: {
+    proxy: {
+      '/api': {
+        target: 'http://localhost:5100',
+        changeOrigin: true,
+        rewrite: (path) => path.replace(/^\/api/, '')
+      }
+    }
+  },
+  preview: {
     proxy: {
       '/api': {
         target: 'http://localhost:5100',
