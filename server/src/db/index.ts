@@ -1,6 +1,7 @@
 import Database from 'better-sqlite3'
 import TorrentSql from './sql/torrent.sql'
 import getServerConfig from '../get-config'
+import userSql from './sql/user.sql'
 
 const config = getServerConfig()
 const DBPath = config.DataBasePath
@@ -12,8 +13,14 @@ const initDB = () => {
   // check logs table
   const torrentTBStmt = db.prepare(TorrentSql.checkTable)
   const torrentTBRow = torrentTBStmt.get()
-  if (torrentTBRow === undefined) {
+  if (!torrentTBRow) {
     return console.log(`Error: DB is not exist!`)
+  }
+  const userTBstmt = db.prepare(userSql.checkTable)
+  const userTBRow = userTBstmt.get()
+  if (!userTBRow) {
+    console.log(`Warning: User table isn't exist, will be created...`)
+    db.exec(userSql.createTable)
   }
 }
 initDB()
