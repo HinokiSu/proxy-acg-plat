@@ -1,6 +1,5 @@
-
-
 `Nginx`
+
 ```
     # web
 	location /acg {
@@ -23,8 +22,8 @@
 	}
 ```
 
-
 `Whole Nginx config`
+
 ```
 server {
 	listen 127.0.0.1:31300;
@@ -45,7 +44,7 @@ server {
 		index index.html index.htm;
 #		try_files $uri $uri/ @router;
 	}
-	
+
 #	location @router {
 #		rewrite ^.*$ /index.html last;
 #	}
@@ -63,3 +62,10 @@ server {
 
 }
 ```
+
+## TODO
+
+- reduce Front-end package size, max < 50kb.
+- reduce the number of chunk
+- page first load, control init render time, max < 3s.
+- SSR, support server side render
