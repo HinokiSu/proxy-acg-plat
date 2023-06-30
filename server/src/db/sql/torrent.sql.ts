@@ -33,10 +33,54 @@ FROM
 	torrent 
 WHERE
 	title LIKE ?;`
+
+const fuzzySelectMultiTitle = (keywords: string[]) => {
+  let likeSql = `SELECT
+  * 
+  FROM
+  torrent 
+  WHERE 
+  title LIKE ?
+  `
+
+  if (keywords.length > 1) {
+    for (let i = 0, len = keywords.length; i < len; i++) {
+      if (i !== 0) {
+        likeSql = likeSql.concat(` or title LIKE ? `)
+      }
+    }
+  }
+
+  likeSql = likeSql.concat(` ORDER BY 
+  publish_time DESC 
+  LIMIT ? OFFSET ?;`)
+
+  return likeSql
+}
+
+const fuzzySelectMultiTitleTotal = (keywords: string[]) => {
+  let likeSql = `SELECT
+  count( * ) AS total  
+  FROM
+  torrent 
+  WHERE 
+  title LIKE ? 
+  `
+  if (keywords.length > 1) {
+    for (let i = 0, len = keywords.length; i < len; i++) {
+      if (i !== 0) {
+        likeSql = likeSql.concat(' or title LIKE ? ')
+      }
+    }
+  }
+  return likeSql
+}
 export default {
   checkTable,
   paginSelect,
   calcTotal,
   fuzzySelectTitle,
-  fuzzySelectTitleTotal
+  fuzzySelectTitleTotal,
+  fuzzySelectMultiTitle,
+  fuzzySelectMultiTitleTotal
 }
