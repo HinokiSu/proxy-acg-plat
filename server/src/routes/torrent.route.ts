@@ -33,13 +33,22 @@ torrentRouter.get('/count', (req, res) => {
 })
 
 interface TSearchPagin extends TPaginQuery {
-  keyword: string
+  keyword?: string
+  anime?: string
 }
 
 torrentRouter.get('/search', (req: any, res) => {
   try {
     const pagin: TSearchPagin = req.query
-    res.json(getFuzzySearchTitle(pagin.keyword, pagin.curpage, pagin.pagesize))
+    console.log(pagin)
+    res.json(
+      getFuzzySearchTitle(
+        pagin.curpage,
+        pagin.pagesize,
+        pagin.keyword,
+        pagin.anime
+      )
+    )
   } catch (err) {
     console.log(err)
   }
