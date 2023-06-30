@@ -1,7 +1,11 @@
 import db from '../db'
 import animeSql from '../db/sql/anime.sql'
-import { TUpdateAnimeDto } from '../interfaces/anime.types'
-import { handleFailed, handleSuccess } from '../utils/responseMsgHandler'
+import { TAnime, TUpdateAnimeDto } from '../interfaces/anime.types'
+import {
+  THandleResult,
+  handleFailed,
+  handleSuccess
+} from '../utils/responseMsgHandler'
 export const getQuarter = (time: string) => {
   const total = db.get(animeSql.countByQuarter, [time])
   const res = db.query(animeSql.selectByQuarter, [time])
@@ -14,7 +18,14 @@ export const getQuarter = (time: string) => {
   })
 }
 
-export const findAnimeDetail = (id: string) => {
+// TODO: anime type
+
+type TAnimeDetailResult = Omit<THandleResult, 'data'> & {
+  data: {
+    anime: TAnime
+  }
+}
+export const findAnimeDetail = (id: string): TAnimeDetailResult => {
   const res = db.get(animeSql.selectById, [id])
   return handleSuccess({
     msg: 'Find anime detail by id success',
@@ -33,9 +44,10 @@ export const updateAnime = (anime: TUpdateAnimeDto) => {
       anime.update_at,
       anime._id
     ])
-    if(!res.changes) return handleFailed({
-      msg: 'Update Anime detail failed'
-    })
+    if (!res.changes)
+      return handleFailed({
+        msg: 'Update Anime detail failed'
+      })
     return handleSuccess({
       msg: 'Update anime success'
     })
