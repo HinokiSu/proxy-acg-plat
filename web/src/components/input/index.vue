@@ -6,7 +6,6 @@
     <label class="input-label">
       <div class="label-name" v-if="isHasLabel">{{ label }}</div>
       <div class="input-wrapper">
-        <!-- TODO: Add icon -->
         <div v-if="hasPreIconSlot" class="pre-icon__container">
           <slot name="preIcon"></slot>
         </div>

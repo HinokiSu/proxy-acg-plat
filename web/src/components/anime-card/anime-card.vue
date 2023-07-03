@@ -1,8 +1,8 @@
 <template>
   <div class="anime-card">
     <div class="card-img-container">
-      <img v-if="!isError" :src="anime?.img" alt="" @error="imgErrorHandle" />
-      <empty-img v-else></empty-img>
+      <empty-img v-if="isError"></empty-img>
+      <img v-else :src="anime?.img" alt="" @error="imgErrorHandle" />
     </div>
     <div class="card-header">
       <div class="anime-title" @click="clickAnime">
@@ -39,7 +39,7 @@ export default defineComponent({
 
   setup(props) {
     const router = useRouter()
-    const isError = ref(false)
+    const isError = ref(true)
     const clickAnime = () => {
       router.push({
         name: 'torrent-search',

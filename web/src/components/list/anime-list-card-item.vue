@@ -97,6 +97,12 @@ export default defineComponent({
       drop-shadow(0 12px 14px rgb(104 112 118 / 0.1));
     transition: transform 0.25s ease 0s, filter 0.25s ease 0s,
       box-shadow 0.25s ease 0s;
+
+    &:hover {
+      & .card__footer {
+        opacity: 1;
+      }
+    }
   }
 
   &__header {
@@ -123,7 +129,6 @@ export default defineComponent({
       box-sizing: border-box;
       margin: 0px;
       width: 100%;
-      padding-left: 0.75rem;
 
       .anime__ja-name {
         display: inherit;
@@ -184,6 +189,8 @@ export default defineComponent({
     justify-content: flex-end;
     align-items: center;
     color: #111;
+    opacity: 0;
+    transition: all 0.5s ease;
   }
 }
 </style>
