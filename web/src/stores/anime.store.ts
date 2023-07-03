@@ -8,6 +8,7 @@ import { TAnime } from '@interfaces/anime.types'
 import getNowISO from '@utils/getNowISO'
 import { defineStore, storeToRefs } from 'pinia'
 import { useUserStore } from './user.store'
+import dayjs from 'dayjs'
 
 type TState = {
   total: number
@@ -50,10 +51,12 @@ export const useAnimeStore = defineStore('AnimeStore', {
         update_at: ''
       }
     },
+    // time format "YYYY/MM/DD" or others
     async getQuarterAnime(time: string) {
-      const res = await fetchQuarter(time)
+      const formattedTime = dayjs(time).format("YYYY/MM/DD")
+      const res = await fetchQuarter(formattedTime)
       if (!res.data) {
-        console.log(`Error: fetch [${time}] quarter anime failed`)
+        console.log(`Error: fetch [${formattedTime}] quarter anime failed`)
       }
       this.total = res.data.total
       this.animeList = res.data.list

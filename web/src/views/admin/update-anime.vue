@@ -1,5 +1,14 @@
 <template>
-  <div class="update-anime-body">
+  <skeleton w="100%" v-if="loading" :num="2"></skeleton>
+  <div v-else class="update-anime-body">
+    <div class="pick-date-box">
+      <date-picker v-model:value="datePickerVal"></date-picker>
+      <acg-button
+        title="Go!"
+        @click="searchAnimeHandler"
+        color="primary"
+      ></acg-button>
+    </div>
     <div class="anime-list">
       <anime-list-card-item
         v-for="item in dataSource"
@@ -64,17 +73,27 @@ import AcgModal from '@components/modal/modal.vue'
 import FileUpload from '@components/file-upload/file-upload.vue'
 import AcgInput from '@components/input/index.vue'
 import { storeToRefs } from 'pinia'
+import DatePicker from '@components/date-picker/date-picker.vue'
+import AcgButton from '@components/button/index.vue'
+import dayjs from 'dayjs'
+import getCurrentQuarter from '@utils/getCurrentQuarter'
+import Skeleton from '@components/skeleton/skeleton.vue'
 export default defineComponent({
   name: 'UpdateAnime',
   components: {
     AcgModal,
     AnimeListCardItem,
     FileUpload,
-    AcgInput
+    AcgInput,
+    AcgButton,
+    DatePicker,
+    Skeleton
   },
   setup() {
     const isVisible = ref(false)
     const { proxy } = getCurrentInstance() as any
+    const datePickerVal = ref('')
+    const loading = ref(true)
     const setVisible = () => {
       isVisible.value = !isVisible.value
     }
@@ -83,6 +102,16 @@ export default defineComponent({
 
     const dataSource = computed(() => animeStore.animeList)
 
+    const getDataAndWait = async () => {
+      loading.value = true
+      await animeStore.getQuarterAnime(datePickerVal.value).then(() => {
+        setTimeout(() => {
+          loading.value = false
+        }, 400)
+      })
+    }
+
+    // Modify Modal
     const modifyHandle = async (val: any) => {
       animeModalRef.value = await animeStore.getAnimeById(val)
       setVisible()
@@ -120,8 +149,15 @@ export default defineComponent({
       }
       animeModalRef.value.img = `https://yukihinoki.top/images/${filename}`
     }
+
+    const searchAnimeHandler = () => {
+      console.log(datePickerVal.value)
+      getDataAndWait()
+    }
+
     onMounted(() => {
-      animeStore.getQuarterAnime('2023/04/01')
+      datePickerVal.value = dayjs(getCurrentQuarter()).format('YYYY-MM')
+      getDataAndWait()
     })
 
     onUnmounted(() => {
@@ -129,19 +165,26 @@ export default defineComponent({
     })
     return {
       isVisible,
+      loading,
       dataSource,
       animeModalRef,
+      datePickerVal,
       setVisible,
       modifyHandle,
       confirmHandle,
       cancelHandle,
-      submitImg
+      submitImg,
+      searchAnimeHandler
     }
   }
 })
 </script>
 
 <style lang="less" scoped>
+.pick-date-box {
+  display: flex;
+  align-items: center;
+}
 .anime-list {
   //   width: 100%;
   list-style: none;
