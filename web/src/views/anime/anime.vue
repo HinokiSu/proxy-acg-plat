@@ -1,5 +1,6 @@
 <template>
-  <div class="anime">
+  <skeleton w="100%" v-if="loading" :num="2"></skeleton>
+  <div v-else class="anime">
     <!-- <div>Developing...</div> -->
     <div class="anime-quarter-list">
       <div class="quarter-item" v-for="item in animeList" :key="item._id">
@@ -10,24 +11,34 @@
 </template>
 
 <script lang="ts">
-import { computed, defineComponent, onMounted } from 'vue'
+import { computed, defineComponent, onMounted, ref } from 'vue'
 import AnimeCard from '@components/anime-card/anime-card.vue'
 import { useAnimeStore } from '@stores/anime.store'
 import getCurrentQuarter from '@utils/getCurrentQuarter'
+import Skeleton from '@components/skeleton/skeleton.vue'
+
 export default defineComponent({
   name: 'Anime',
   components: {
-    AnimeCard
+    AnimeCard,
+    Skeleton
   },
   setup() {
     const animeStore = useAnimeStore()
+    const loading = ref(true)
     const animeList = computed(() => animeStore.animeList)
-    const currentQuarter = getCurrentQuarter() 
-    console.log(currentQuarter)
+    const currentQuarter = getCurrentQuarter()
+
     onMounted(async () => {
-      await animeStore.getQuarterAnime(currentQuarter)
+      loading.value = true
+      await animeStore.getQuarterAnime(currentQuarter).then(() => {
+        setTimeout(() => {
+          loading.value = false
+        }, 600)
+      })
     })
     return {
+      loading,
       animeList
     }
   }
