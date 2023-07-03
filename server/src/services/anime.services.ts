@@ -1,3 +1,4 @@
+import dayjs from 'dayjs'
 import db from '../db'
 import animeSql from '../db/sql/anime.sql'
 import { TAnime, TUpdateAnimeDto } from '../interfaces/anime.types'
@@ -6,9 +7,37 @@ import {
   handleFailed,
   handleSuccess
 } from '../utils/responseMsgHandler'
+
+/**
+ *
+ * @param startTime this quarter start time
+ * @param pre previous start time(10day)
+ * @param delay delay start time(30day)
+ * @returns earliest and latest start time
+ */
+const calcAnimeQuarterStartTime = (startTime: string, pre = 10, delay = 30) => {
+  const currentDate = dayjs(startTime)
+  // sub the pre day
+  const earliestStartTime = currentDate
+    .subtract(pre, 'day')
+    .format('YYYY/MM/DD')
+  const latestStartTime = currentDate.add(30, 'day').format('YYYY/MM/DD')
+  return {
+    earliest: earliestStartTime,
+    latest: latestStartTime
+  }
+}
+
 export const getQuarter = (time: string) => {
-  const total = db.get(animeSql.countByQuarter, [time])
-  const res = db.query(animeSql.selectByQuarter, [time])
+  const quarterTime = calcAnimeQuarterStartTime(time)
+  const total = db.get(animeSql.countSpecifyQuarter, [
+    quarterTime.earliest,
+    quarterTime.latest
+  ])
+  const res = db.query(animeSql.selectSpecifyQuarter, [
+    quarterTime.earliest,
+    quarterTime.latest
+  ])
   return handleSuccess({
     msg: 'Get quarter success',
     data: {
@@ -17,8 +46,6 @@ export const getQuarter = (time: string) => {
     }
   })
 }
-
-// TODO: anime type
 
 type TAnimeDetailResult = Omit<THandleResult, 'data'> & {
   data: {

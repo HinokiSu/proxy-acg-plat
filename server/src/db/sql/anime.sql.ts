@@ -15,11 +15,12 @@ const updateById = `UPDATE anime SET zh_name = ?, en_name = ?, img = ?, update_a
 /**
  * @param date ('YYYY/MM/dd')
  */
-const selectByQuarter = `SELECT * FROM anime WHERE start_date > ?;`
-const countByQuarter = `SELECT count(*) as total FROM anime WHERE start_date > ?;`
+const countSpecifyQuarter = `SELECT count(*) as total FROM anime WHERE start_date > ? and start_date < ? ORDER BY start_date;`
+
+const selectSpecifyQuarter = `SELECT * FROM anime WHERE start_date > ? and start_date < ? ORDER BY start_date;`
 export default {
   selectById,
   updateById,
-  selectByQuarter,
-  countByQuarter
+  countSpecifyQuarter,
+  selectSpecifyQuarter
 }
