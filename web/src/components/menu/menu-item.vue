@@ -82,13 +82,14 @@ export default defineComponent({
 
   &:hover {
     background-color: @--menu-hover-color;
+    border-color: @--menu-hover-color;
     color: #11181c;
   }
 
   &.active {
     // background-color: @--menu-bg-color-active;
     background: linear-gradient(90deg, #ffe5f8, #f6c6e7, #ffc2ee);
-    border-color: #eaeaea;
+    border-color: #f6c6e7;
     color: #11181c;
   }
 
