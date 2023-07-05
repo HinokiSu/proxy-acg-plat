@@ -5,7 +5,7 @@ import {
   TResultAnimeDetail
 } from './interfaces/animeResult.types'
 import { TUpdateAnimeDto } from '@interfaces/anime.types'
-import { TUploadFile } from './interfaces/common.types'
+import { TBaseResult, TUploadFile } from './interfaces/common.types'
 
 const apiBasePath = '/anime'
 
@@ -45,3 +45,21 @@ export const fetchPostUploadImg = (
       authorization: token
     }
   })
+
+export const UpdateAnimeImg = (
+  img: string,
+  id: string,
+  token: string
+): Promise<TBaseResult> =>
+  ApiClient.post(
+    apiURLHandler(apiBasePath, '/update/img'),
+    {
+      img,
+      id
+    },
+    {
+      headers: {
+        authorization: token
+      }
+    }
+  )

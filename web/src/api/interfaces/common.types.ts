@@ -21,5 +21,6 @@ export type TUploadFile = Omit<TBaseResult, 'data'> & {
     filename: string
     path: string
     size: number
+    remote: string
   }
 }
