@@ -26,11 +26,23 @@
     @cancel="cancelHandle"
   >
     <div class="anime-modify__form">
-      <file-upload
-        class="upload-area"
-        max-size="2MB"
-        @submit="submitImg"
-      ></file-upload>
+      <div class="form__modify-img">
+        <div class="origin-modify" v-if="animeModalRef.img">
+          <acg-img :src="animeModalRef.img"></acg-img>
+          <acg-button
+            v-show="animeModalRef.img"
+            title="Delete"
+            color="error"
+            @click="deleteImgHandle"
+          ></acg-button>
+        </div>
+        <file-upload
+          v-else
+          class="upload-area"
+          max-size="2MB"
+          @submit="submitImg"
+        ></file-upload>
+      </div>
       <div class="form__name-container">
         <div class="name__zh">
           <acg-input
@@ -78,6 +90,7 @@ import AcgButton from '@components/button/index.vue'
 import dayjs from 'dayjs'
 import getCurrentQuarter from '@utils/getCurrentQuarter'
 import Skeleton from '@components/skeleton/skeleton.vue'
+import AcgImg from '@components/acg-img/acg-img.vue'
 export default defineComponent({
   name: 'UpdateAnime',
   components: {
@@ -87,7 +100,8 @@ export default defineComponent({
     AcgInput,
     AcgButton,
     DatePicker,
-    Skeleton
+    Skeleton,
+    AcgImg
   },
   setup() {
     const isVisible = ref(false)
@@ -113,10 +127,13 @@ export default defineComponent({
 
     // Modify Modal
     const modifyHandle = async (val: any) => {
+      // get anime data for modal
       animeModalRef.value = await animeStore.getAnimeById(val)
       setVisible()
+      await getDataAndWait()
     }
 
+    // modal confirm button
     const confirmHandle = async () => {
       const fetchRes = await animeStore.updateAnime()
       if (!fetchRes) {
@@ -130,15 +147,20 @@ export default defineComponent({
         color: 'success',
         msg: `Update Anime successfully`
       })
+      await getDataAndWait()
       setTimeout(() => {
         setVisible()
+        animeStore.clearAnime()
       }, 500)
     }
 
+    // modal cancel button
     const cancelHandle = () => {
       setVisible()
+      animeStore.clearAnime()
     }
 
+    // submit image button
     const submitImg = async (val: File) => {
       const filename = await animeStore.uploadImg(val)
       if (!filename) {
@@ -147,12 +169,35 @@ export default defineComponent({
           msg: `Error: image file upload failed`
         })
       }
-      animeModalRef.value.img = `https://yukihinoki.top/images/${filename}`
+      // TODO: Modify file location
+      animeModalRef.value.img = filename
     }
 
-    const searchAnimeHandler = () => {
-      console.log(datePickerVal.value)
-      getDataAndWait()
+    // delete image button
+    const deleteImgHandle = async () => {
+      // TODO: anime store to delete img
+      const result = await animeStore.updateAnimeImg(
+        '',
+        animeModalRef.value._id
+      )
+      if (!result) {
+        animeModalRef.value.img = ''
+        return proxy.$toast({
+          color: 'error',
+          msg: `Error: Anime image updated failed`
+        })
+      }
+      proxy.$toast({
+        color: 'success',
+        msg: `Info: Anime image updated successfully`
+      })
+      // setVisible()
+
+      animeStore.anime.img = ''
+    }
+
+    const searchAnimeHandler = async () => {
+      await getDataAndWait()
     }
 
     onMounted(() => {
@@ -174,7 +219,8 @@ export default defineComponent({
       confirmHandle,
       cancelHandle,
       submitImg,
-      searchAnimeHandler
+      searchAnimeHandler,
+      deleteImgHandle
     }
   }
 })
@@ -217,9 +263,18 @@ export default defineComponent({
   padding-left: 14px;
   padding-right: 14px;
 
-  .upload-area {
-    min-height: 200px;
+  .form__modify-img {
+    .origin-modify {
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+    }
+
+    .upload-area {
+      min-height: 200px;
+    }
   }
+
   .form__name-container {
     display: flex;
     flex-direction: column;

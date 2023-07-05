@@ -39,7 +39,7 @@ export default defineComponent({
 
   setup(props) {
     const router = useRouter()
-    const isError = ref(true)
+    const isError = ref(false)
     const clickAnime = () => {
       router.push({
         name: 'torrent-search',
@@ -68,10 +68,7 @@ export default defineComponent({
   flex-direction: column;
   place-content: inherit;
   align-items: inherit;
-  //   box-shadow: 1px 4px 12px 4px #eaeaea;
-  /* filter: drop-shadow(0 12px 24px rgb(104 112 118 / 0.15))
-    drop-shadow(0 12px 14px rgb(104 112 118 / 0.1));
-    */
+
   transition: all 0.3s ease;
 
   border-radius: 14px;
