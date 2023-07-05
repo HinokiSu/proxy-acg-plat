@@ -2,7 +2,9 @@ import express from 'express'
 import {
   findAnimeDetail,
   getQuarter,
-  updateAnime
+  updateAnime,
+  updateAnimeImgPath,
+  uploadHandle
 } from '../services/anime.services'
 import { TUpdateAnimeDto } from '../interfaces/anime.types'
 import { getErrorMessage } from '../utils/responseMsgHandler'
@@ -38,10 +40,11 @@ animeRoute.post(
         file: {}
       })
     }
+
     res.json({
       msg: `Info: File upload received success`,
       status: 200,
-      file: req.file
+      file: uploadHandle(req.file)
     })
   }
 )
@@ -53,6 +56,14 @@ type TQuarterQuery = {
 animeRoute.get('/all', (req, res) => {
   const query = req.query as TQuarterQuery
   res.json(getQuarter(query.time))
+})
+
+animeRoute.post('/update/img', verifyToken, (req, res) => {
+  const query = req.body as {
+    img: string
+    id: string
+  }
+  res.json(updateAnimeImgPath(query.img, query.id))
 })
 
 export default animeRoute

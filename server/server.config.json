@@ -1,6 +1,7 @@
 {
-    "DataBasePath": "D:\\GitHub\\proxy-acg-plat\\server\\resources\\database\\acg_db.db",
-    "Port": "5100",
-    "SecretKey": "hinoki",
-    "UploadPath": "D:\\GitHub\\proxy-acg-plat\\upload"
+  "DataBasePath": "D:\\GitHub\\proxy-acg-plat\\server\\resources\\database\\acg_db.db",
+  "Port": "5100",
+  "SecretKey": "hinoki",
+  "UploadPath": "D:\\GitHub\\proxy-acg-plat\\upload",
+  "ImgFilePathPrefix": "https://www.yukihino.top/images/"
 }

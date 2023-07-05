@@ -6,6 +6,7 @@ type TConfig = {
   Port: number
   SecretKey: string
   UploadPath: string
+  ImgFilePathPrefix: string
 }
 const getServerConfig = () => {
   const configPath = path.join(process.cwd(), path.sep, 'server.config.json')
@@ -16,7 +17,8 @@ const getServerConfig = () => {
       DataBasePath: '',
       Port: 5100,
       SecretKey: '',
-      UploadPath: ''
+      UploadPath: '',
+      ImgFilePathPrefix: ''
     }
   }
   const configJson: TConfig = JSON.parse(config)

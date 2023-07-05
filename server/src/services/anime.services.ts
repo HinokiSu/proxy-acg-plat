@@ -7,6 +7,7 @@ import {
   handleFailed,
   handleSuccess
 } from '../utils/responseMsgHandler'
+import getServerConfig from '../get-config'
 
 /**
  *
@@ -81,4 +82,28 @@ export const updateAnime = (anime: TUpdateAnimeDto) => {
   } catch (error) {
     throw error
   }
+}
+
+type TMulterFile = Express.Multer.File & {
+  remote?: string
+}
+
+export const uploadHandle = (file: TMulterFile) => {
+  const config = getServerConfig()
+  const fullPath = config.ImgFilePathPrefix.concat(file.filename)
+  // new remote attribute, full remote visit path
+  file.remote = fullPath
+  return file
+}
+
+export const updateAnimeImgPath = (imgPath: string, id: string) => {
+  const res = db.run(animeSql.updateAnimeImg, [imgPath, id])
+  if (!res.changes) {
+    return handleFailed({
+      msg: 'Update anime img path failed'
+    })
+  }
+  return handleSuccess({
+    msg: 'Update anime img path success'
+  })
 }
