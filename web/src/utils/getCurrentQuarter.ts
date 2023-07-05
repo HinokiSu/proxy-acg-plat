@@ -26,7 +26,6 @@ const getCurrentQuarter = () => {
   ]
   const month = dayjs().get('month')
   const year = dayjs().get('year')
-  console.log(month)
 
   for (const item of quarter) {
     if (month >= item.startMon && month <= item.startMon + 2) {

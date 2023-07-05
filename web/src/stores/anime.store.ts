@@ -1,4 +1,5 @@
 import {
+  UpdateAnimeImg,
   fetchAnimeById,
   fetchPostUpdateAnime,
   fetchPostUploadImg,
@@ -51,9 +52,25 @@ export const useAnimeStore = defineStore('AnimeStore', {
         update_at: ''
       }
     },
+
+    clearAnime() {
+      this.anime = {
+        _id: '',
+        origin_id: '',
+        zh_name: '',
+        ja_name: '',
+        en_name: '',
+        start_date: '',
+        end_date: '',
+        credit: '',
+        img: '',
+        create_at: '',
+        update_at: ''
+      }
+    },
     // time format "YYYY/MM/DD" or others
     async getQuarterAnime(time: string) {
-      const formattedTime = dayjs(time).format("YYYY/MM/DD")
+      const formattedTime = dayjs(time).format('YYYY/MM/DD')
       const res = await fetchQuarter(formattedTime)
       if (!res.data) {
         console.log(`Error: fetch [${formattedTime}] quarter anime failed`)
@@ -94,8 +111,16 @@ export const useAnimeStore = defineStore('AnimeStore', {
       if (!res.status) {
         return ''
       }
-      console.log(res.file)
-      return res.file.filename
+      return res.file.remote
+    },
+
+    async updateAnimeImg(img: string, id: string) {
+      const { token } = storeToRefs(useUserStore())
+      const res = await UpdateAnimeImg(img, id, token.value)
+      if (!res.status) {
+        return false
+      }
+      return true
     }
   }
 })
