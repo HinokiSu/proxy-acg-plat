@@ -1,5 +1,6 @@
 node_modules
 documents
+*.zip
 
 # build
 dist
@@ -12,4 +13,5 @@ coverage
 stats.html
 upload
 
-ubuntu
+# server
+server.config.json
