@@ -13,7 +13,7 @@ export default defineConfig({
     }),
     compression({
       include: [/\.(js)$/, /\.(css)$/],
-      deleteOriginalAssets: true
+      deleteOriginalAssets: false
     })
   ],
   resolve: {
