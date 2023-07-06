@@ -6,6 +6,7 @@ documents
 dist
 build
 resources
+release
 
 # jest
 coverage

@@ -1,6 +1,6 @@
 {
   "name": "proxy-acg-plat-server",
-  "version": "1.0.0",
+  "version": "2.0.0",
   "main": "dist/main.js",
   "license": "MIT",
   "scripts": {

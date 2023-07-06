@@ -1,11 +1,13 @@
 {
   "name": "proxy-acg-plat-web",
   "private": true,
-  "version": "0.0.0",
+  "version": "2.0.0",
   "type": "module",
   "scripts": {
     "dev": "vite",
-    "build": "vue-tsc && vite build --mode production",
+    "clean": "rimraf release/",
+    "zip": "mkdirp ./release/&&node script/zip-dist.js",
+    "build": "vue-tsc && vite build --mode production && yarn clean && yarn zip",
     "preview": "vite preview"
   },
   "dependencies": {
@@ -18,9 +20,12 @@
     "@types/node": "^20.1.0",
     "@types/nprogress": "^0.2.0",
     "@vitejs/plugin-vue": "^4.1.0",
+    "archiver": "^5.3.1",
     "axios": "^1.4.0",
     "dayjs": "^1.11.7",
+    "mkdirp": "^3.0.1",
     "nprogress": "^0.2.0",
+    "rimraf": "^5.0.1",
     "rollup-plugin-visualizer": "^5.9.0",
     "typescript": "^5.0.2",
     "vite": "^4.3.2",
