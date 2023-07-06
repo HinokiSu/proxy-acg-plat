@@ -27,8 +27,9 @@ export default defineComponent({
   color: #f881ab;
   font-size: 1.2rem;
   padding: 1rem 1.2rem;
-  border: 1px solid #eaeaea;
-  border-radius: 1rem;
+  // border: 1px solid #eaeaea;
+  // border-radius: 1rem;
   cursor: pointer;
+  text-align: center;
 }
 </style>
