@@ -14,8 +14,9 @@ coverage
 stats.html
 upload
 
-# server
-server.config.json
-server.config.*.json
 
 .env.production
+# server
+server.config.json
+server.config.dev.json
+

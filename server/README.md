@@ -1,5 +1,12 @@
 Proxy Acg Plat Server
+
 > proxy acg platform: server
+
+### Usage
+
+#### 1. Need create `server.config.dev.json` and `server.config.json` in `./server/**`
+
+> The file format is displayed as follows
 
 ```json
 {
