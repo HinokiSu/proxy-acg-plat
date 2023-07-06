@@ -19,12 +19,14 @@ const countSpecifyQuarter = `SELECT count(*) as total FROM anime WHERE start_dat
 
 const selectSpecifyQuarter = `SELECT * FROM anime WHERE start_date > ? and start_date < ? ORDER BY start_date;`
 
-
 const updateAnimeImg = `UPDATE anime SET img = ? WHERE _id = ?`
+
+const selectSpecifyWeekDay = `SELECT * FROM anime WHERE start_week = ?`
 export default {
   selectById,
   updateById,
   countSpecifyQuarter,
   selectSpecifyQuarter,
-  updateAnimeImg
+  updateAnimeImg,
+  selectSpecifyWeekDay
 }

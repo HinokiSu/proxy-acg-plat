@@ -63,6 +63,11 @@ export const findAnimeDetail = (id: string): TAnimeDetailResult => {
   })
 }
 
+/**
+ * update full anime info
+ * @param anime full anime info
+ * @returns msg
+ */
 export const updateAnime = (anime: TUpdateAnimeDto) => {
   try {
     const res = db.run(animeSql.updateById, [
@@ -88,6 +93,11 @@ type TMulterFile = Express.Multer.File & {
   remote?: string
 }
 
+/**
+ *
+ * @param file anime image file
+ * @returns file type
+ */
 export const uploadHandle = (file: TMulterFile) => {
   const config = getServerConfig()
   const fullPath = config.ImgFilePathPrefix.concat(file.filename)
@@ -96,6 +106,12 @@ export const uploadHandle = (file: TMulterFile) => {
   return file
 }
 
+/**
+ * update anime image path
+ * @param imgPath image remote path
+ * @param id anime id
+ * @returns msg
+ */
 export const updateAnimeImgPath = (imgPath: string, id: string) => {
   const res = db.run(animeSql.updateAnimeImg, [imgPath, id])
   if (!res.changes) {
@@ -105,5 +121,15 @@ export const updateAnimeImgPath = (imgPath: string, id: string) => {
   }
   return handleSuccess({
     msg: 'Update anime img path success'
+  })
+}
+
+export const getAnimeByWeekDay = (week: number) => {
+  const res = db.query(animeSql.selectSpecifyWeekDay, [week])
+  return handleSuccess({
+    msg: `Get anime info by week`,
+    data: {
+      list: res
+    }
   })
 }

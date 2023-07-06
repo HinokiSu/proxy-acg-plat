@@ -1,6 +1,7 @@
 import express from 'express'
 import {
   findAnimeDetail,
+  getAnimeByWeekDay,
   getQuarter,
   updateAnime,
   updateAnimeImgPath,
@@ -56,6 +57,13 @@ type TQuarterQuery = {
 animeRoute.get('/all', (req, res) => {
   const query = req.query as TQuarterQuery
   res.json(getQuarter(query.time))
+})
+
+type TWeekQuery = { week: number }
+
+animeRoute.get('/week', (req: any, res) => {
+  const query = req.query as TWeekQuery
+  res.json(getAnimeByWeekDay(query.week))
 })
 
 animeRoute.post('/update/img', verifyToken, (req, res) => {
