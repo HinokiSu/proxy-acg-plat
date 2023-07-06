@@ -40,7 +40,6 @@ interface TSearchPagin extends TPaginQuery {
 torrentRouter.get('/search', (req: any, res) => {
   try {
     const pagin: TSearchPagin = req.query
-    console.log(pagin)
     res.json(
       getFuzzySearchTitle(
         pagin.curpage,

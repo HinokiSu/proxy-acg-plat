@@ -17,7 +17,6 @@ userRouter.post('/login', (req, res, next) => {
 userRouter.post('/register', (req, res, next) => {
   try {
     const user = req.body as TRegisterDto
-    console.log(req.body)
     registerUser(user)
     res.status(200).send('Register successfully')
   } catch (error) {
