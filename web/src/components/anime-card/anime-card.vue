@@ -15,17 +15,21 @@
         <span>~</span>
         <div class="end-time">{{ anime?.end_date }}</div>
       </div>
+      <div class="start-week">
+        {{ startWeek }}
+      </div>
     </div>
   </div>
 </template>
 
 <script lang="ts">
 import { TAnime } from '@interfaces/anime.types'
-import { defineComponent, PropType, ref } from 'vue'
+import { computed, defineComponent, PropType, ref } from 'vue'
 import { useRouter } from 'vue-router'
 import Skeleton from '@components/skeleton/skeleton.vue'
 
 import EmptyImg from '@components/empty/empty-img.vue'
+import { getWeekDayStr } from '@utils/getWeekDayStr'
 export default defineComponent({
   name: 'AnimeCard',
   props: {
@@ -40,6 +44,10 @@ export default defineComponent({
   setup(props) {
     const router = useRouter()
     const isError = ref(false)
+    const startWeek = computed(() =>
+      getWeekDayStr(props.anime?.start_week as number)
+    )
+
     const clickAnime = () => {
       router.push({
         name: 'torrent-search',
@@ -51,15 +59,16 @@ export default defineComponent({
     const imgErrorHandle = () => {
       isError.value = !isError.value
     }
-    return { clickAnime, isError, imgErrorHandle }
+
+    return { clickAnime, isError, imgErrorHandle, startWeek }
   }
 })
 </script>
 
 <style lang="less" scoped>
 .anime-card {
-  width: 250px;
-  height: 250px;
+  width: 300px;
+  height: 320px;
   opacity: 1;
   position: relative;
   overflow: hidden;
@@ -105,6 +114,11 @@ export default defineComponent({
       display: flex;
       font-size: 0.625rem;
     }
+
+    .start-week {
+      font-size: 0.775rem;
+      padding-bottom: 8px;
+    }
   }
 
   .card-img-container {
@@ -114,7 +128,6 @@ export default defineComponent({
     width: 100%;
     height: 100%;
     max-width: 100%;
-    transform: 250ms ease 0ms, opacity 200ms ease-in 0ms;
 
     img {
       display: block;
