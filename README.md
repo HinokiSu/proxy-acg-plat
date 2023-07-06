@@ -1,7 +1,6 @@
 Proxy Acg Platform
-> Find anime resources website
-> Resources origin in `bangumi.moe`
 
+> Find anime resources website
 
 ## TODO
 

@@ -1,27 +1,16 @@
 ### Proxy Acg Plat Web
+> Proxy acg plat: website
 
-#### Nginx
+
+### Nginx
 
 ```
-server {
-    listen       80;
-    server_name  localhost;
 
-    #access_log  /var/log/nginx/host.access.log  main;
-
-    location /acg {
-        root   /srv/proxy-acg-plat/web/dist;
-        index  index.html index.htm;
-    }
-
-    #error_page  404              /404.html;
-
-    # redirect server error pages to the static page /50x.html
-    #
-    error_page   500 502 503 504  /50x.html;
-    location = /50x.html {
-        root   /usr/share/nginx/html;
-    }
-
+location /acg {
+alias ***path***/dist;
+try_files $uri $uri/ /acg/index.html;
+index index.html index.htm;
 }
+
+
 ```

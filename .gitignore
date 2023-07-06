@@ -16,3 +16,6 @@ upload
 
 # server
 server.config.json
+server.config.*.json
+
+.env.production
