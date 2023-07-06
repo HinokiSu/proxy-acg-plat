@@ -1,5 +1,5 @@
-import { TAnime } from "@interfaces/anime.types"
-import { TBaseResult } from "./common.types"
+import { TAnime } from '@interfaces/anime.types'
+import { TBaseResult } from './common.types'
 
 export type TPaginQuarterAnime = Omit<TBaseResult, 'data'> & {
   data: {
@@ -8,10 +8,14 @@ export type TPaginQuarterAnime = Omit<TBaseResult, 'data'> & {
   }
 }
 
-
 export type TResultAnimeDetail = Omit<TBaseResult, 'data'> & {
-    data: {
-     anime: TAnime
-    }
+  data: {
+    anime: TAnime
   }
-  
+}
+
+export type TResultWeekAnime = Omit<TBaseResult, 'data'> & {
+  data: {
+    list: TAnime[]
+  }
+}

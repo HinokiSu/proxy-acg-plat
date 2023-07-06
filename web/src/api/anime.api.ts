@@ -2,7 +2,8 @@ import { apiURLHandler } from '@utils/apiURLHandler'
 import ApiClient from '@utils/axios'
 import {
   TPaginQuarterAnime,
-  TResultAnimeDetail
+  TResultAnimeDetail,
+  TResultWeekAnime
 } from './interfaces/animeResult.types'
 import { TUpdateAnimeDto } from '@interfaces/anime.types'
 import { TBaseResult, TUploadFile } from './interfaces/common.types'
@@ -12,6 +13,11 @@ const apiBasePath = '/anime'
 export const fetchQuarter = (time: string): Promise<TPaginQuarterAnime> =>
   ApiClient.get(apiURLHandler(apiBasePath, `/all`), {
     time
+  })
+
+export const fetchWeekInQuarter = (week: number): Promise<TResultWeekAnime> =>
+  ApiClient.get(apiURLHandler(apiBasePath, `/week`), {
+    week
   })
 
 export const fetchPostUpdateAnime = (

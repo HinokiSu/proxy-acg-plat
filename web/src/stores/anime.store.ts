@@ -3,9 +3,10 @@ import {
   fetchAnimeById,
   fetchPostUpdateAnime,
   fetchPostUploadImg,
-  fetchQuarter
+  fetchQuarter,
+  fetchWeekInQuarter
 } from '@api/anime.api'
-import { TAnime } from '@interfaces/anime.types'
+import { TAnime, TWeekItem } from '@interfaces/anime.types'
 import getNowISO from '@utils/getNowISO'
 import { defineStore, storeToRefs } from 'pinia'
 import { useUserStore } from './user.store'
@@ -15,6 +16,8 @@ type TState = {
   total: number
   animeList: TAnime[]
   anime: TAnime
+  week: TWeekItem[]
+  loading: boolean
 }
 export const useAnimeStore = defineStore('AnimeStore', {
   state: (): TState => ({
@@ -31,8 +34,11 @@ export const useAnimeStore = defineStore('AnimeStore', {
       credit: '',
       img: '',
       create_at: '',
-      update_at: ''
-    }
+      update_at: '',
+      start_week: 1
+    },
+    week: [],
+    loading: true
   }),
   getters: {},
   actions: {
@@ -49,8 +55,10 @@ export const useAnimeStore = defineStore('AnimeStore', {
         credit: '',
         img: '',
         create_at: '',
-        update_at: ''
+        update_at: '',
+        start_week: 1
       }
+      this.week = []
     },
 
     clearAnime() {
@@ -65,11 +73,42 @@ export const useAnimeStore = defineStore('AnimeStore', {
         credit: '',
         img: '',
         create_at: '',
-        update_at: ''
+        update_at: '',
+        start_week: 1
       }
     },
-    // time format "YYYY/MM/DD" or others
+
+    getWeekTabs() {
+      const tabs = [
+        { name: 'ALL', flag: -1, status: false },
+        { name: '周一', flag: 1, status: false },
+        { name: '周二', flag: 2, status: false },
+        { name: '周三', flag: 3, status: false },
+        { name: '周四', flag: 4, status: false },
+        { name: '周五', flag: 5, status: false },
+        { name: '周六', flag: 6, status: false },
+        { name: '周日', flag: 0, status: false }
+      ]
+      this.week = tabs
+    },
+    changeWeekTab(key: number) {
+      this.week.forEach((item) => {
+        if (item.flag === key) {
+          item.status = true
+        } else {
+          item.status = false
+        }
+      })
+    },
+    async getWeekAnime(key: number) {
+      const res = await fetchWeekInQuarter(key)
+      if (!res.data) {
+        console.log(`Error: fetch [${this.week}] week anime failed`)
+      }
+      this.animeList = res.data.list
+    },
     async getQuarterAnime(time: string) {
+      // time will be formatted "YYYY/MM/DD"
       const formattedTime = dayjs(time).format('YYYY/MM/DD')
       const res = await fetchQuarter(formattedTime)
       if (!res.data) {

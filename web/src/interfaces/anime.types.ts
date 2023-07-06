@@ -10,6 +10,7 @@ export type TAnime = {
   img: string
   create_at: string
   update_at: string
+  start_week: number
 }
 
 export type TUpdateAnimeDto = {
@@ -21,3 +22,9 @@ export type TUpdateAnimeDto = {
 }
 
 export type TUploadFile = File & { remote?: string }
+
+export type TWeekItem = {
+  name: string
+  flag: number
+  status: boolean
+}
