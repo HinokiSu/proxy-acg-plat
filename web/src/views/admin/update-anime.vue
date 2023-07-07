@@ -1,13 +1,16 @@
 <template>
   <skeleton w="100%" v-if="loading" :num="2"></skeleton>
-  <div v-else class="update-anime-body">
-    <div class="pick-date-box">
-      <date-picker v-model:value="datePickerVal"></date-picker>
-      <acg-button
-        title="Go!"
-        @click="searchAnimeHandler"
-        color="primary"
-      ></acg-button>
+  <div v-else class="update-anime__body">
+    <div class="update-anime__header">
+      <div class="pick-date-box">
+        <date-picker v-model:value="datePickerVal"></date-picker>
+        <acg-button
+          title="Go!"
+          @click="searchAnimeHandler"
+          color="primary"
+        ></acg-button>
+      </div>
+      <add-anime></add-anime>
     </div>
     <div class="anime-list">
       <anime-list-card-item
@@ -91,6 +94,7 @@ import dayjs from 'dayjs'
 import getCurrentQuarter from '@utils/getCurrentQuarter'
 import Skeleton from '@components/skeleton/skeleton.vue'
 import AcgImg from '@components/acg-img/acg-img.vue'
+import AddAnime from './add-anime.vue'
 export default defineComponent({
   name: 'UpdateAnime',
   components: {
@@ -101,24 +105,26 @@ export default defineComponent({
     AcgButton,
     DatePicker,
     Skeleton,
-    AcgImg
+    AcgImg,
+    AddAnime
   },
   setup() {
     const isVisible = ref(false)
     const { proxy } = getCurrentInstance() as any
-    const datePickerVal = ref('')
     const loading = ref(true)
+    const { anime: animeModalRef, quarter: datePickerVal } = storeToRefs(
+      useAnimeStore()
+    )
     const setVisible = () => {
       isVisible.value = !isVisible.value
     }
     const animeStore = useAnimeStore()
-    const { anime: animeModalRef } = storeToRefs(useAnimeStore())
 
     const dataSource = computed(() => animeStore.animeList)
 
     const getDataAndWait = async () => {
       loading.value = true
-      await animeStore.getQuarterAnime(datePickerVal.value).then(() => {
+      await animeStore.getQuarterAnime().then(() => {
         setTimeout(() => {
           loading.value = false
         }, 400)
@@ -130,7 +136,6 @@ export default defineComponent({
       // get anime data for modal
       animeModalRef.value = await animeStore.getAnimeById(val)
       setVisible()
-      await getDataAndWait()
     }
 
     // modal confirm button
@@ -227,9 +232,19 @@ export default defineComponent({
 </script>
 
 <style lang="less" scoped>
-.pick-date-box {
-  display: flex;
-  align-items: center;
+.update-anime {
+  &__body {
+  }
+
+  &__header {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    .pick-date-box {
+      display: flex;
+      align-items: center;
+    }
+  }
 }
 .anime-list {
   //   width: 100%;
