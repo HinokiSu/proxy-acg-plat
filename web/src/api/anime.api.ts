@@ -5,22 +5,24 @@ import {
   TResultAnimeDetail,
   TResultWeekAnime
 } from './interfaces/animeResult.types'
-import { TUpdateAnimeDto } from '@interfaces/anime.types'
+import { TAnime, TUpdateAnimeDto } from '@interfaces/anime.types'
 import { TBaseResult, TUploadFile } from './interfaces/common.types'
 
 const apiBasePath = '/anime'
 
-export const fetchQuarter = (time: string): Promise<TPaginQuarterAnime> =>
+export const fetchQuarterApi = (time: string): Promise<TPaginQuarterAnime> =>
   ApiClient.get(apiURLHandler(apiBasePath, `/all`), {
     time
   })
 
-export const fetchWeekInQuarter = (week: number): Promise<TResultWeekAnime> =>
+export const fetchWeekInQuarterApi = (
+  week: number
+): Promise<TResultWeekAnime> =>
   ApiClient.get(apiURLHandler(apiBasePath, `/week`), {
     week
   })
 
-export const fetchPostUpdateAnime = (
+export const fetchPostUpdateAnimeApi = (
   anime: TUpdateAnimeDto,
   token: string
 ): Promise<any> =>
@@ -36,12 +38,12 @@ export const fetchPostUpdateAnime = (
     }
   )
 
-export const fetchAnimeById = (id: string): Promise<TResultAnimeDetail> =>
+export const fetchAnimeByIdApi = (id: string): Promise<TResultAnimeDetail> =>
   ApiClient.get(apiURLHandler(apiBasePath, `/id`), {
     id
   })
 
-export const fetchPostUploadImg = (
+export const fetchPostUploadImgApi = (
   file: FormData,
   token: string
 ): Promise<TUploadFile> =>
@@ -52,7 +54,7 @@ export const fetchPostUploadImg = (
     }
   })
 
-export const UpdateAnimeImg = (
+export const updateAnimeImgApi = (
   img: string,
   id: string,
   token: string
@@ -69,3 +71,16 @@ export const UpdateAnimeImg = (
       }
     }
   )
+
+export const addAnimeApi = (anime: TAnime, token: string) => {
+
+  return ApiClient.post(
+    apiURLHandler(apiBasePath, '/add'),
+    { ...anime },
+    {
+      headers: {
+        authorization: token
+      }
+    }
+  )
+}

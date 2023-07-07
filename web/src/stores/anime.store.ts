@@ -1,10 +1,11 @@
 import {
-  UpdateAnimeImg,
-  fetchAnimeById,
-  fetchPostUpdateAnime,
-  fetchPostUploadImg,
-  fetchQuarter,
-  fetchWeekInQuarter
+  updateAnimeImgApi,
+  fetchAnimeByIdApi,
+  fetchPostUpdateAnimeApi,
+  fetchPostUploadImgApi,
+  fetchQuarterApi,
+  fetchWeekInQuarterApi,
+  addAnimeApi
 } from '@api/anime.api'
 import { TAnime, TWeekItem } from '@interfaces/anime.types'
 import getNowISO from '@utils/getNowISO'
@@ -18,6 +19,7 @@ type TState = {
   anime: TAnime
   week: TWeekItem[]
   loading: boolean
+  quarter: string
 }
 export const useAnimeStore = defineStore('AnimeStore', {
   state: (): TState => ({
@@ -38,7 +40,8 @@ export const useAnimeStore = defineStore('AnimeStore', {
       start_week: 1
     },
     week: [],
-    loading: true
+    loading: true,
+    quarter: ''
   }),
   getters: {},
   actions: {
@@ -56,9 +59,10 @@ export const useAnimeStore = defineStore('AnimeStore', {
         img: '',
         create_at: '',
         update_at: '',
-        start_week: 1
+        start_week: null
       }
       this.week = []
+      this.quarter = ''
     },
 
     clearAnime() {
@@ -74,7 +78,7 @@ export const useAnimeStore = defineStore('AnimeStore', {
         img: '',
         create_at: '',
         update_at: '',
-        start_week: 1
+        start_week: null
       }
     },
 
@@ -101,16 +105,16 @@ export const useAnimeStore = defineStore('AnimeStore', {
       })
     },
     async getWeekAnime(key: number) {
-      const res = await fetchWeekInQuarter(key)
+      const res = await fetchWeekInQuarterApi(key)
       if (!res.data) {
         console.log(`Error: fetch [${this.week}] week anime failed`)
       }
       this.animeList = res.data.list
     },
-    async getQuarterAnime(time: string) {
+    async getQuarterAnime() {
       // time will be formatted "YYYY/MM/DD"
-      const formattedTime = dayjs(time).format('YYYY/MM/DD')
-      const res = await fetchQuarter(formattedTime)
+      const formattedTime = dayjs(this.quarter).format('YYYY/MM/DD')
+      const res = await fetchQuarterApi(formattedTime)
       if (!res.data) {
         console.log(`Error: fetch [${formattedTime}] quarter anime failed`)
       }
@@ -118,14 +122,14 @@ export const useAnimeStore = defineStore('AnimeStore', {
       this.animeList = res.data.list
     },
     async getAnimeById(id: string) {
-      const res = await fetchAnimeById(id)
+      const res = await fetchAnimeByIdApi(id)
       this.anime = res.data.anime
       return this.anime
     },
     async updateAnime() {
       const { token } = storeToRefs(useUserStore())
       const now = getNowISO()
-      const res = await fetchPostUpdateAnime(
+      const res = await fetchPostUpdateAnimeApi(
         {
           _id: this.anime._id,
           zh_name: this.anime.zh_name,
@@ -146,7 +150,7 @@ export const useAnimeStore = defineStore('AnimeStore', {
 
       const formData = new FormData()
       formData.append('file', file)
-      const res = await fetchPostUploadImg(formData, token.value)
+      const res = await fetchPostUploadImgApi(formData, token.value)
       if (!res.status) {
         return ''
       }
@@ -155,11 +159,16 @@ export const useAnimeStore = defineStore('AnimeStore', {
 
     async updateAnimeImg(img: string, id: string) {
       const { token } = storeToRefs(useUserStore())
-      const res = await UpdateAnimeImg(img, id, token.value)
+      const res = await updateAnimeImgApi(img, id, token.value)
       if (!res.status) {
         return false
       }
       return true
+    },
+    async createNewAnime() {
+      const { token } = storeToRefs(useUserStore())
+      const res = await addAnimeApi(this.anime, token.value)
+      console.log(res)
     }
   }
 })

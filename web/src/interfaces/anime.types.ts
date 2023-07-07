@@ -10,7 +10,7 @@ export type TAnime = {
   img: string
   create_at: string
   update_at: string
-  start_week: number
+  start_week: number | null
 }
 
 export type TUpdateAnimeDto = {
