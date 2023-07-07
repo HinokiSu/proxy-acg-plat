@@ -1,3 +1,24 @@
+import { createSqlField, createSqlValuesMark } from '../../utils/sqlFormatter'
+
+const fieldOfAnimeTable = [
+  '_id',
+  'origin_id',
+  'zh_name',
+  'ja_name',
+  'en_name',
+  'start_date',
+  'end_date',
+  'credit',
+  'img',
+  'create_at',
+  'update_at',
+  'start_week'
+]
+
+const insert = `INSERT INTO anime (${createSqlField(
+  fieldOfAnimeTable
+)}) VALUES (${createSqlValuesMark(fieldOfAnimeTable)})`
+
 /**
  * @param _id
  */
@@ -23,6 +44,7 @@ const updateAnimeImg = `UPDATE anime SET img = ? WHERE _id = ?`
 
 const selectSpecifyWeekDay = `SELECT * FROM anime WHERE start_week = ?`
 export default {
+  insert,
   selectById,
   updateById,
   countSpecifyQuarter,

@@ -8,6 +8,31 @@ import {
   handleSuccess
 } from '../utils/responseMsgHandler'
 import getServerConfig from '../get-config'
+import { v4 as uuidV4 } from 'uuid'
+
+export const insertNewAnime = (anime: TAnime) => {
+  const res = db.run(animeSql.insert, [
+    uuidV4(),
+    anime.origin_id,
+    anime.zh_name,
+    anime.ja_name,
+    anime.en_name,
+    anime.start_date,
+    anime.end_date,
+    anime.credit,
+    anime.img,
+    anime.create_at,
+    anime.update_at,
+    anime.start_week
+  ])
+  if (!res.changes)
+    return handleFailed({
+      msg: 'insert new anime failed!'
+    })
+  return handleSuccess({
+    msg: 'insert new anime success'
+  })
+}
 
 /**
  *

@@ -13,9 +13,8 @@ export type TAnime = {
   start_week: number
 }
 
-
 export type TUpdateAnimeDto = {
-  _id: string,
+  _id: string
   zh_name: string
   en_name: string
   img: string

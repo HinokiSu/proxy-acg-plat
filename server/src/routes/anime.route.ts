@@ -3,11 +3,12 @@ import {
   findAnimeDetail,
   getAnimeByWeekDay,
   getQuarter,
+  insertNewAnime,
   updateAnime,
   updateAnimeImgPath,
   uploadHandle
 } from '../services/anime.services'
-import { TUpdateAnimeDto } from '../interfaces/anime.types'
+import { TAnime, TUpdateAnimeDto } from '../interfaces/anime.types'
 import { getErrorMessage } from '../utils/responseMsgHandler'
 import { verifyToken } from '../services/auth'
 import upload from '../utils/multer'
@@ -18,6 +19,15 @@ type TQuery = { id: string }
 animeRoute.get('/id', (req, res, next) => {
   const query = req.query as TQuery
   res.json(findAnimeDetail(query.id))
+})
+
+animeRoute.post('/add', verifyToken, (req, res) => {
+  try {
+    const body = req.body.anime as TAnime
+    res.json(insertNewAnime(body))
+  } catch (error) {
+    return res.status(500).send(getErrorMessage(error))
+  }
 })
 
 animeRoute.post('/update', verifyToken, (req, res) => {
