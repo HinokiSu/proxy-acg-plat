@@ -17,7 +17,6 @@ const getServerConfig = () => {
   } else {
     configPath = path.join(process.cwd(), path.sep, 'server.config.json')
   }
-  console.log(configPath)
   const config = fs.readFileSync(configPath, 'utf-8')
   if (!config) {
     console.log(`Error: Config is empty!!, config path: ${configPath}`)
