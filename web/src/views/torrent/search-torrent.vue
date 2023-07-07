@@ -74,19 +74,19 @@ export default defineComponent({
 
     const getDataAndWait = async () => {
       loading.value = true
-      await torrentStore
-        .searchFuzzyTitle(
-          paginRef.curPage,
-          paginRef.pageSize,
-          searchVal.value,
-          anime.value
-        )
-        .then(() => {
-          loading.value = false
-          if (!torrentStore.torrentList.length) {
-            isEmpty.value = true
-          }
-        })
+      await torrentStore.searchFuzzyTitle(
+        paginRef.curPage,
+        paginRef.pageSize,
+        searchVal.value,
+        anime.value
+      )
+
+      loading.value = false
+      if (!torrentStore.torrentList.length) {
+        isEmpty.value = true
+      } else {
+        isEmpty.value = false
+      }
     }
 
     const clickSearch = async () => {
@@ -100,7 +100,7 @@ export default defineComponent({
         })
       }
       await getDataAndWait().then(() => {
-        isCenter.value = !isCenter.value
+        isCenter.value = false
       })
     }
 
