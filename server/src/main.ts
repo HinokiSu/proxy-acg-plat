@@ -8,7 +8,7 @@ import userRouter from './routes/user.route'
 const bootstrap = () => {
   const server = express()
 
-  server.use(bodyParser.urlencoded({ extended: false }))
+  server.use(bodyParser.urlencoded({ extended: true }))
   server.use(bodyParser.json())
   server.use(cors())
   const config = getServerConfig()
