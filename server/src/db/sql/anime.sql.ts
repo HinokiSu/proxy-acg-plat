@@ -43,8 +43,11 @@ const selectSpecifyQuarter = `SELECT * FROM anime WHERE start_date > ? and start
 const updateAnimeImg = `UPDATE anime SET img = ? WHERE _id = ?`
 
 const selectSpecifyWeekDay = `SELECT * FROM anime WHERE start_week = ?`
+
+const deleteAnime = `DELETE from anime WHERE _id = ?`
 export default {
   insert,
+  deleteAnime,
   selectById,
   updateById,
   countSpecifyQuarter,

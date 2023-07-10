@@ -158,3 +158,15 @@ export const getAnimeByWeekDay = (week: number) => {
     }
   })
 }
+
+export const deleteAnime = (id: string) => {
+  const res = db.run(animeSql.deleteAnime, [id])
+  if (!res.changes) {
+    return handleFailed({
+      msg: 'Delete anime failed'
+    })
+  }
+  return handleSuccess({
+    msg: 'Delete anime success'
+  })
+}

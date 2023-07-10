@@ -1,5 +1,6 @@
 import express from 'express'
 import {
+  deleteAnime,
   findAnimeDetail,
   getAnimeByWeekDay,
   getQuarter,
@@ -23,7 +24,7 @@ animeRoute.get('/id', (req, res, next) => {
 
 animeRoute.post('/add', verifyToken, (req, res) => {
   try {
-    const body = req.body.anime as TAnime
+    const body = req.body as TAnime
     res.json(insertNewAnime(body))
   } catch (error) {
     return res.status(500).send(getErrorMessage(error))
@@ -82,6 +83,13 @@ animeRoute.post('/update/img', verifyToken, (req, res) => {
     id: string
   }
   res.json(updateAnimeImgPath(query.img, query.id))
+})
+
+animeRoute.post('/delete/id', verifyToken, (req, res) => {
+  const body = req.body as {
+    id: string
+  }
+  res.json(deleteAnime(body.id))
 })
 
 export default animeRoute
