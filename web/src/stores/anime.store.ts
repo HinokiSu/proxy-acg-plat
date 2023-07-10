@@ -5,7 +5,8 @@ import {
   fetchPostUploadImgApi,
   fetchQuarterApi,
   fetchWeekInQuarterApi,
-  addAnimeApi
+  addAnimeApi,
+  deleteAnimeApi
 } from '@api/anime.api'
 import { TAnime, TWeekItem } from '@interfaces/anime.types'
 import getNowISO from '@utils/getNowISO'
@@ -167,8 +168,15 @@ export const useAnimeStore = defineStore('AnimeStore', {
     },
     async createNewAnime() {
       const { token } = storeToRefs(useUserStore())
-      const res = await addAnimeApi(this.anime, token.value)
-      console.log(res)
+      await addAnimeApi(this.anime, token.value)
+    },
+    async deleteAnime(id: string) {
+      const { token } = storeToRefs(useUserStore())
+      const res = await deleteAnimeApi(id, token.value)
+      if (!res.status) {
+        return false
+      }
+      return true
     }
   }
 })

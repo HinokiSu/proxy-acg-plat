@@ -73,10 +73,24 @@ export const updateAnimeImgApi = (
   )
 
 export const addAnimeApi = (anime: TAnime, token: string) => {
-
   return ApiClient.post(
     apiURLHandler(apiBasePath, '/add'),
     { ...anime },
+    {
+      headers: {
+        authorization: token
+      }
+    }
+  )
+}
+
+export const deleteAnimeApi = (
+  id: string,
+  token: string
+): Promise<TBaseResult> => {
+  return ApiClient.post(
+    apiURLHandler(apiBasePath, '/delete/id'),
+    { id },
     {
       headers: {
         authorization: token

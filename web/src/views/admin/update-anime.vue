@@ -18,6 +18,7 @@
         :key="item._id"
         :anime="item"
         @modify="modifyHandle"
+        @delete="deleteClickHandle"
       ></anime-list-card-item>
     </div>
   </div>
@@ -71,6 +72,18 @@
       </div>
     </div>
   </acg-modal>
+
+  <acg-modal
+    title="Whether To Delete Anime ?"
+    :visible="isDeleteVisible"
+    @confirm="confirmDeleteHandle"
+    @cancel="cancelDeleteHandle"
+    confirm="Delete"
+  >
+    <div class="delete-modal__body">
+      <span class="anime-anime">{{ deleteModalRef.title }}</span>
+    </div>
+  </acg-modal>
 </template>
 
 <script lang="ts">
@@ -80,7 +93,8 @@ import {
   onMounted,
   onUnmounted,
   ref,
-  getCurrentInstance
+  getCurrentInstance,
+  reactive
 } from 'vue'
 import { useAnimeStore } from '@stores/anime.store'
 import AnimeListCardItem from '@components/list/anime-list-card-item.vue'
@@ -174,13 +188,11 @@ export default defineComponent({
           msg: `Error: image file upload failed`
         })
       }
-      // TODO: Modify file location
       animeModalRef.value.img = filename
     }
 
     // delete image button
     const deleteImgHandle = async () => {
-      // TODO: anime store to delete img
       const result = await animeStore.updateAnimeImg(
         '',
         animeModalRef.value._id
@@ -205,6 +217,47 @@ export default defineComponent({
       await getDataAndWait()
     }
 
+    /*
+     * Delete anime Modal
+     */
+
+    const isDeleteVisible = ref(false)
+    const deleteModalRef = reactive({
+      id: '',
+      title: ''
+    })
+    const initDeleteModal = () => {
+      deleteModalRef.id = ''
+      deleteModalRef.title = ''
+    }
+    const deleteClickHandle = (val: { id: string; title: string }) => {
+      isDeleteVisible.value = true
+      deleteModalRef.id = val.id
+      deleteModalRef.title = val.title
+    }
+    const confirmDeleteHandle = async () => {
+      const result = await animeStore.deleteAnime(deleteModalRef.id)
+      isDeleteVisible.value = false
+      initDeleteModal()
+      if (result) {
+        await animeStore.getQuarterAnime()
+        return proxy.$toast({
+          color: 'success',
+          msg: `Delete Anime successfully`
+        })
+      }
+
+      return proxy.$toast({
+        color: 'error',
+        msg: `Delete Anime failed`
+      })
+    }
+
+    const cancelDeleteHandle = () => {
+      isDeleteVisible.value = false
+      initDeleteModal()
+    }
+
     onMounted(() => {
       datePickerVal.value = dayjs(getCurrentQuarter()).format('YYYY-MM')
       getDataAndWait()
@@ -215,9 +268,12 @@ export default defineComponent({
     })
     return {
       isVisible,
+      isDeleteVisible,
+
       loading,
       dataSource,
       animeModalRef,
+      deleteModalRef,
       datePickerVal,
       setVisible,
       modifyHandle,
@@ -225,7 +281,10 @@ export default defineComponent({
       cancelHandle,
       submitImg,
       searchAnimeHandler,
-      deleteImgHandle
+      deleteImgHandle,
+      deleteClickHandle,
+      confirmDeleteHandle,
+      cancelDeleteHandle
     }
   }
 })
@@ -233,9 +292,6 @@ export default defineComponent({
 
 <style lang="less" scoped>
 .update-anime {
-  &__body {
-  }
-
   &__header {
     display: flex;
     align-items: center;
@@ -300,6 +356,16 @@ export default defineComponent({
     div {
       width: 100%;
     }
+  }
+}
+
+.delete-modal__body {
+  padding: 10px 0px;
+
+  .anime-anime {
+    padding-top: 4px;
+    padding-left: 12px;
+    font-size: 0.875rem;
   }
 }
 </style>

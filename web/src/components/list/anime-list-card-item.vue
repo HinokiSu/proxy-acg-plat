@@ -30,7 +30,22 @@
         </div>
       </div>
       <div class="card__footer">
-        <acg-button fill-wd="6px" color="error" h="2.2rem" @click="clickHandle">
+        <acg-button
+          fill-wd="6px"
+          color="error"
+          h="2.2rem"
+          @click="deleteHandle"
+        >
+          <template #preIcon>
+            <delete-icon></delete-icon>
+          </template>
+        </acg-button>
+        <acg-button
+          fill-wd="6px"
+          color="primary"
+          h="2.2rem"
+          @click="modifyHandle"
+        >
           <template #preIcon>
             <draw-icon></draw-icon>
           </template>
@@ -46,6 +61,7 @@ import { PropType, defineComponent } from 'vue'
 import AcgButton from '@components/button/index.vue'
 import DrawIcon from '@icons/draw-icon.vue'
 import EmptyImg from '@components/empty/empty-img.vue'
+import DeleteIcon from '@icons/delete-icon.vue'
 export default defineComponent({
   name: 'AnimeListCardItem',
   props: {
@@ -54,15 +70,20 @@ export default defineComponent({
   components: {
     AcgButton,
     DrawIcon,
-    EmptyImg
+    EmptyImg,
+    DeleteIcon
   },
-  emits: ['modify'],
+  emits: ['modify', 'delete'],
   setup(props, { emit }) {
-    const clickHandle = () => {
+    const modifyHandle = () => {
       emit('modify', props.anime?._id)
     }
+    const deleteHandle = () => {
+      emit('delete', { id: props.anime?._id, title: props.anime?.ja_name })
+    }
     return {
-      clickHandle
+      modifyHandle,
+      deleteHandle
     }
   }
 })
@@ -191,6 +212,7 @@ export default defineComponent({
     color: #111;
     opacity: 0;
     transition: all 0.5s ease;
+    column-gap: 8px;
   }
 }
 </style>
