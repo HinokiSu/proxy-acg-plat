@@ -17,7 +17,7 @@
 ```
 
 location /acg {
-alias ***path***/dist;
+alias <$path>/dist;
 try_files $uri $uri/ /acg/index.html;
 index index.html index.htm;
 }

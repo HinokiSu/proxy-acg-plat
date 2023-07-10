@@ -1,6 +1,9 @@
 Proxy Acg Platform
 
-> Find anime resources website
+> Only Show anime resources website
+
+> Tips: This platform doesn't anime resource fetching provided
+
 
 ## TODO
 
