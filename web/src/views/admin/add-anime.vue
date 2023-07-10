@@ -106,7 +106,6 @@ export default defineComponent({
           msg: `Error: Anime start date isn't empty!`
         })
       }
-      console.log(dayjs(playDateRef.start) >= dayjs(playDateRef.end))
       if (dayjs(playDateRef.start) >= dayjs(playDateRef.end)) {
         return proxy.$toast({
           color: 'error',
