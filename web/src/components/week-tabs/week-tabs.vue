@@ -17,7 +17,6 @@ import WeekTabItem from './week-tab-item.vue'
 import { storeToRefs } from 'pinia'
 import { useAnimeStore } from '@stores/anime.store'
 import dayjs from 'dayjs'
-import getCurrentQuarter from '@utils/getCurrentQuarter'
 export default defineComponent({
   name: 'WeekTabs',
   components: {
@@ -43,7 +42,7 @@ export default defineComponent({
       if (key === -1) {
         animeStore.changeWeekTab(key)
         loading.value = true
-        await animeStore.getQuarterAnime(getCurrentQuarter()).then(() => {
+        await animeStore.getQuarterAnime().then(() => {
           setTimeout(() => {
             loading.value = false
           }, 600)
